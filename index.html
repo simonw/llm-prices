@@ -462,6 +462,26 @@
             renderTable(presetList);
         }
 
+        function handlePaste(event) {
+            const text = (event.clipboardData || window.clipboardData).getData('text');
+            const comboMatch = text.match(/([\d,]+)\s*input[, ]+([\d,]+)\s*output/i);
+            if (comboMatch) {
+                event.preventDefault();
+                document.getElementById('inputTokens').value = comboMatch[1].replace(/,/g, '');
+                document.getElementById('outputTokens').value = comboMatch[2].replace(/,/g, '');
+                calculateCost();
+                return;
+            }
+            const numMatch = text.match(/^\s*([\d,]+)\s*$/);
+            if (numMatch) {
+                event.preventDefault();
+                event.target.value = numMatch[1].replace(/,/g, '');
+                calculateCost();
+            }
+        }
+
+        document.getElementById('inputTokens').addEventListener('paste', handlePaste);
+
         // Initialize the calculator and table
         createPresetsTable();
         calculateCost();
