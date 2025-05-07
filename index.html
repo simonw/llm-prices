@@ -157,19 +157,19 @@
                 <h1>LLM pricing calculator</h1>
                 <div class="input-group">
                     <label for="inputTokens">Number of input tokens (aka prompt tokens):</label>
-                    <input type="number" id="inputTokens" min="0" onkeyup="calculateCost()" onchange="calculateCost()">
+                    <input type="number" id="inputTokens" min="0">
                 </div>
                 <div class="input-group">
                     <label for="outputTokens">Number of output tokens (aka completion tokens):</label>
-                    <input type="number" id="outputTokens" min="0" onkeyup="calculateCost()" onchange="calculateCost()">
+                    <input type="number" id="outputTokens" min="0">
                 </div>
                 <div class="input-group">
                     <label for="inputCost">Cost per million input tokens ($):</label>
-                    <input type="number" id="inputCost" min="0" step="0.000001" onkeyup="calculateCost()" onchange="calculateCost()">
+                    <input type="number" id="inputCost" min="0" step="0.000001">
                 </div>
                 <div class="input-group">
                     <label for="outputCost">Cost per million output tokens ($):</label>
-                    <input type="number" id="outputCost" min="0" step="0.000001" onkeyup="calculateCost()" onchange="calculateCost()">
+                    <input type="number" id="outputCost" min="0" step="0.000001">
                 </div>
                 <div class="result">
                     <p>Total cost: $<span id="costDollars">0.000000</span></p>
@@ -189,7 +189,7 @@
                                         <span class="sort-icon" aria-hidden="true"></span>
                                     </button>
                                 </th>
-                                <th aria-sort="ascending">
+                                <th aria-sort="ascending"> <!-- Default sort visually, JS will confirm -->
                                     <button type="button" id="sortByInput">
                                         Input cost
                                         <span class="sort-icon" aria-hidden="true">↑</span>
@@ -281,62 +281,102 @@
             'gemini-2.5-flash-thinking': { name: 'Gemini 2.5 Flash Thinking', input: 0.15, output: 3.50 },
         };
 
+        // Global state variables for sorting
+        let currentSortColumn = 'input'; // Default sort column: 'name', 'input', or 'output'
+        let currentSortDirection = 'ascending'; // 'ascending' or 'descending'
+
+        // Form field IDs
+        const elIds = {
+            inputTokens: 'inputTokens',
+            outputTokens: 'outputTokens',
+            inputCost: 'inputCost',
+            outputCost: 'outputCost',
+            costDollars: 'costDollars',
+            costCents: 'costCents',
+            presetTableBody: 'presetTableBody',
+            sortByName: 'sortByName',
+            sortByInput: 'sortByInput',
+            sortByOutput: 'sortByOutput'
+        };
+
+        // Hash parameter keys (short for brevity in URL)
+        const HASH_KEYS = {
+            inputTokens: 'it',
+            outputTokens: 'ot',
+            inputCost: 'ic',
+            outputCost: 'oc',
+            sortBy: 'sb',
+            sortDir: 'sd'
+        };
+
+        function updateUrlHash() {
+            const params = new URLSearchParams();
+            const inputTokensVal = document.getElementById(elIds.inputTokens).value;
+            const outputTokensVal = document.getElementById(elIds.outputTokens).value;
+            const inputCostVal = document.getElementById(elIds.inputCost).value;
+            const outputCostVal = document.getElementById(elIds.outputCost).value;
+
+            if (inputTokensVal && parseFloat(inputTokensVal) !== 0) params.set(HASH_KEYS.inputTokens, inputTokensVal);
+            if (outputTokensVal && parseFloat(outputTokensVal) !== 0) params.set(HASH_KEYS.outputTokens, outputTokensVal);
+            if (inputCostVal && parseFloat(inputCostVal) !== 0) params.set(HASH_KEYS.inputCost, inputCostVal);
+            if (outputCostVal && parseFloat(outputCostVal) !== 0) params.set(HASH_KEYS.outputCost, outputCostVal);
+
+            // Only add sort params if not the default sort to keep URL cleaner for default state
+            if (!(currentSortColumn === 'input' && currentSortDirection === 'ascending')) {
+                 params.set(HASH_KEYS.sortBy, currentSortColumn);
+                 params.set(HASH_KEYS.sortDir, currentSortDirection);
+            }
+
+            const hashString = params.toString();
+            if (hashString) {
+                history.replaceState(null, '', '#' + hashString);
+            } else {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+        }
+
         function calculateCost() {
-            const inputTokens = parseFloat(document.getElementById('inputTokens').value) || 0;
-            const outputTokens = parseFloat(document.getElementById('outputTokens').value) || 0;
-            const inputCost = parseFloat(document.getElementById('inputCost').value) || 0;
-            const outputCost = parseFloat(document.getElementById('outputCost').value) || 0;
+            const inputTokens = parseFloat(document.getElementById(elIds.inputTokens).value) || 0;
+            const outputTokens = parseFloat(document.getElementById(elIds.outputTokens).value) || 0;
+            const inputCost = parseFloat(document.getElementById(elIds.inputCost).value) || 0;
+            const outputCost = parseFloat(document.getElementById(elIds.outputCost).value) || 0;
 
             const totalCost = (inputTokens * inputCost / 1000000) + (outputTokens * outputCost / 1000000);
             
-            document.getElementById('costDollars').textContent = totalCost.toFixed(6);
-            document.getElementById('costCents').textContent = trimZeros((totalCost * 100).toFixed(4));
+            document.getElementById(elIds.costDollars).textContent = totalCost.toFixed(6);
+            document.getElementById(elIds.costCents).textContent = trimZeros((totalCost * 100).toFixed(4));
+            updateUrlHash();
         }
 
-        function trimZeros(num) {
-            return num.replace(/\.?0+$/, '');
+        function trimZeros(numStr) {
+            return numStr.replace(/\.?0+$/, '');
         }
 
-        function setPreset(model) {
-            const preset = presets[model];
+        function setPreset(modelKey) {
+            const preset = presets[modelKey];
+            if (!preset) return;
+
             let prices;
-            
             if (preset.getPrice) {
                 prices = preset.getPrice();
             } else {
                 prices = { input: preset.input, output: preset.output };
             }
             
-            document.getElementById('inputCost').value = prices.input;
-            document.getElementById('outputCost').value = prices.output;
-            calculateCost();
+            document.getElementById(elIds.inputCost).value = prices.input;
+            document.getElementById(elIds.outputCost).value = prices.output;
+            calculateCost(); // This will also call updateUrlHash
         }
 
         function formatPrice(price) {
-            // For whole numbers (like $5)
-            if (Number.isInteger(price)) {
-                return `$${price}`;
-            }
-
-            // Get the number as a string and analyze
+            if (Number.isInteger(price)) return `$${price}`;
             const priceStr = price.toString();
-
-            // If the number has more than 2 decimal places and ends with non-zero digits,
-            // preserve the exact representation to avoid loss of precision
-            if (priceStr.split('.')[1]?.length > 2 && !priceStr.endsWith('0')) {
-                return `$${priceStr}`;
-            }
-
-            // For all other decimal values (including 0.2, 0.15, etc.), ensure exactly 2 decimal places
+            if (priceStr.split('.')[1]?.length > 2 && !priceStr.endsWith('0')) return `$${priceStr}`;
             return `$${price.toFixed(2)}`;
         }
 
-        // Create presets table
-        function createPresetsTable() {
-            const presetTableBody = document.getElementById('presetTableBody');
+        function getSortedPresetList(sortCol, sortDir) {
             const presetList = [];
-            
-            // Convert presets object to array for sorting
             for (const [key, preset] of Object.entries(presets)) {
                 let prices;
                 if (preset.getPrice) {
@@ -344,7 +384,6 @@
                 } else {
                     prices = { input: preset.input, output: preset.output };
                 }
-                
                 presetList.push({
                     key: key,
                     name: preset.name,
@@ -352,36 +391,39 @@
                     output: prices.output
                 });
             }
-            
-            // Initial sort by input price (cheapest first)
-            presetList.sort((a, b) => a.input - b.input);
-            
-            // Populate table
-            renderTable(presetList);
-            
-            // Add event listeners to sort buttons
-            document.getElementById('sortByName').addEventListener('click', () => {
-                sortTable('name');
+
+            presetList.sort((a, b) => {
+                let valA, valB;
+                if (sortCol === 'name') {
+                    valA = a.name.toLowerCase(); // Case-insensitive sort for names
+                    valB = b.name.toLowerCase();
+                    if (valA < valB) return sortDir === 'ascending' ? -1 : 1;
+                    if (valA > valB) return sortDir === 'ascending' ? 1 : -1;
+                    return 0;
+                } else if (sortCol === 'input') {
+                    valA = a.input;
+                    valB = b.input;
+                } else if (sortCol === 'output') {
+                    valA = a.output;
+                    valB = b.output;
+                } else {
+                    return 0; // Should not happen with valid sortCol
+                }
+
+                return sortDir === 'ascending' ? valA - valB : valB - valA;
             });
-            
-            document.getElementById('sortByInput').addEventListener('click', () => {
-                sortTable('input');
-            });
-            
-            document.getElementById('sortByOutput').addEventListener('click', () => {
-                sortTable('output');
-            });
+            return presetList;
         }
-        
-        // Render the table with the given data
+
         function renderTable(data) {
-            const presetTableBody = document.getElementById('presetTableBody');
-            presetTableBody.innerHTML = '';
+            const presetTableBody = document.getElementById(elIds.presetTableBody);
+            presetTableBody.innerHTML = ''; // Clear existing rows
             
             data.forEach(item => {
                 const row = document.createElement('tr');
+                // Note: onclick now calls window.setPreset because these are dynamically added
                 row.innerHTML = `
-                    <td><button class="model-name-btn" onclick="setPreset('${item.key}')">${item.name}</button></td>
+                    <td><button class="model-name-btn" onclick="window.setPreset('${item.key}')">${item.name}</button></td>
                     <td>${formatPrice(item.input)}</td>
                     <td>${formatPrice(item.output)}</td>
                 `;
@@ -389,79 +431,87 @@
             });
         }
         
-        // Sort table by the given column
-        function sortTable(column) {
-            const sortColumns = {
-                'name': 0,
-                'input': 1,
-                'output': 2
-            };
-            
+        function updateTableSortVisualsAndData() {
             const thElements = document.querySelectorAll('.preset-table th');
-            const columnTh = thElements[sortColumns[column]];
-            
-            // Get the current sort direction for this column
-            const currentSort = columnTh.getAttribute('aria-sort');
-            let newSort;
-            
-            // Toggle or set sort direction
-            if (currentSort === 'ascending') {
-                newSort = 'descending';
-            } else if (currentSort === 'descending') {
-                newSort = 'ascending';
-            } else {
-                // If not currently sorted by this column
-                newSort = (column === 'name') ? 'ascending' : 'ascending';
-            }
-            
-            // Reset all sort indicators
             thElements.forEach(th => {
                 th.setAttribute('aria-sort', 'none');
                 th.querySelector('.sort-icon').textContent = '';
             });
-            
-            // Set new sort state
-            columnTh.setAttribute('aria-sort', newSort);
-            columnTh.querySelector('.sort-icon').textContent = (newSort === 'ascending') ? '↑' : '↓';
-            
-            // Convert presets object to array for sorting
-            const presetList = [];
-            for (const [key, preset] of Object.entries(presets)) {
-                let prices;
-                if (preset.getPrice) {
-                    prices = preset.getPrice();
-                } else {
-                    prices = { input: preset.input, output: preset.output };
+
+            let activeThButtonId;
+            if (currentSortColumn === 'name') activeThButtonId = elIds.sortByName;
+            else if (currentSortColumn === 'input') activeThButtonId = elIds.sortByInput;
+            else if (currentSortColumn === 'output') activeThButtonId = elIds.sortByOutput;
+
+            if (activeThButtonId) {
+                const activeTh = document.getElementById(activeThButtonId)?.closest('th');
+                if (activeTh) {
+                    activeTh.setAttribute('aria-sort', currentSortDirection);
+                    activeTh.querySelector('.sort-icon').textContent = (currentSortDirection === 'ascending') ? '↑' : '↓';
                 }
-                
-                presetList.push({
-                    key: key,
-                    name: preset.name,
-                    input: prices.input,
-                    output: prices.output
-                });
             }
+
+            const sortedList = getSortedPresetList(currentSortColumn, currentSortDirection);
+            renderTable(sortedList);
+        }
+
+        function sortTable(column) {
+            if (currentSortColumn === column) {
+                currentSortDirection = (currentSortDirection === 'ascending') ? 'descending' : 'ascending';
+            } else {
+                currentSortColumn = column;
+                // Default direction for a new column (name: asc, numeric: asc)
+                currentSortDirection = 'ascending';
+            }
+            updateTableSortVisualsAndData();
+            updateUrlHash();
+        }
+
+        function applyStateFromHash() {
+            if (!window.location.hash || window.location.hash === '#') {
+                return; // No hash, use defaults
+            }
+
+            const params = new URLSearchParams(window.location.hash.substring(1));
+
+            const inputTokensEl = document.getElementById(elIds.inputTokens);
+            const outputTokensEl = document.getElementById(elIds.outputTokens);
+            const inputCostEl = document.getElementById(elIds.inputCost);
+            const outputCostEl = document.getElementById(elIds.outputCost);
+
+            if (params.has(HASH_KEYS.inputTokens)) inputTokensEl.value = params.get(HASH_KEYS.inputTokens);
+            if (params.has(HASH_KEYS.outputTokens)) outputTokensEl.value = params.get(HASH_KEYS.outputTokens);
+            if (params.has(HASH_KEYS.inputCost)) inputCostEl.value = params.get(HASH_KEYS.inputCost);
+            if (params.has(HASH_KEYS.outputCost)) outputCostEl.value = params.get(HASH_KEYS.outputCost);
+
+            const sortByFromHash = params.get(HASH_KEYS.sortBy);
+            const sortDirFromHash = params.get(HASH_KEYS.sortDir);
+
+            // Valid sort columns and directions
+            const validSortCols = ['name', 'input', 'output'];
+            const validSortDirs = ['ascending', 'descending'];
+
+            if (sortByFromHash && validSortCols.includes(sortByFromHash) && 
+                sortDirFromHash && validSortDirs.includes(sortDirFromHash)) {
+                currentSortColumn = sortByFromHash;
+                currentSortDirection = sortDirFromHash;
+            } else if (sortByFromHash || sortDirFromHash) {
+                // If partial or invalid sort params, revert to default to avoid broken state
+                currentSortColumn = 'input';
+                currentSortDirection = 'ascending';
+            }
+            // If no sort params in hash, defaults currentSortColumn/Direction are used
+        }
+
+        function createPresetsTableStructure() {
+            // Event listeners for sort buttons
+            document.getElementById(elIds.sortByName).addEventListener('click', () => sortTable('name'));
+            document.getElementById(elIds.sortByInput).addEventListener('click', () => sortTable('input'));
+            document.getElementById(elIds.sortByOutput).addEventListener('click', () => sortTable('output'));
             
-            // Sort the data
-            presetList.sort((a, b) => {
-                if (column === 'name') {
-                    return (newSort === 'ascending')
-                        ? a.name.localeCompare(b.name)
-                        : b.name.localeCompare(a.name);
-                } else if (column === 'input') {
-                    return (newSort === 'ascending')
-                        ? a.input - b.input
-                        : b.input - a.input;
-                } else if (column === 'output') {
-                    return (newSort === 'ascending')
-                        ? a.output - b.output
-                        : b.output - a.output;
-                }
-                return 0;
-            });
-            
-            // Render the sorted table
-            renderTable(presetList);
+            // Initial render based on currentSortColumn and currentSortDirection
+            // (which might have been updated by applyStateFromHash)
+            updateTableSortVisualsAndData();
         }
 
         function handlePaste(event) {
@@ -469,24 +519,50 @@
             const comboMatch = text.match(/([\d,]+)\s*input[, ]+([\d,]+)\s*output/i);
             if (comboMatch) {
                 event.preventDefault();
-                document.getElementById('inputTokens').value = comboMatch[1].replace(/,/g, '');
-                document.getElementById('outputTokens').value = comboMatch[2].replace(/,/g, '');
+                document.getElementById(elIds.inputTokens).value = comboMatch[1].replace(/,/g, '');
+                document.getElementById(elIds.outputTokens).value = comboMatch[2].replace(/,/g, '');
                 calculateCost();
                 return;
             }
             const numMatch = text.match(/^\s*([\d,]+)\s*$/);
-            if (numMatch) {
+            if (numMatch && event.target.type === 'number') { // Ensure it's a number input
                 event.preventDefault();
                 event.target.value = numMatch[1].replace(/,/g, '');
+                // Manually trigger 'input' event if needed, or just calculate
                 calculateCost();
             }
         }
 
-        document.getElementById('inputTokens').addEventListener('paste', handlePaste);
+        // Make setPreset globally accessible for dynamically created buttons
+        window.setPreset = setPreset;
 
-        // Initialize the calculator and table
-        createPresetsTable();
-        calculateCost();
+        // Initialize on DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+            applyStateFromHash();      // 1. Apply state from URL hash first (updates globals)
+            createPresetsTableStructure(); // 2. Setup table structure & initial render using (potentially updated) globals
+            calculateCost();           // 3. Initial calculation and URL hash update based on current state
+
+            // Add event listeners to form inputs
+            const formInputs = [elIds.inputTokens, elIds.outputTokens, elIds.inputCost, elIds.outputCost];
+            formInputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', calculateCost);
+                // Add paste listener only to token inputs as per original logic
+                if (id === elIds.inputTokens || id === elIds.outputTokens) {
+                     document.getElementById(id).addEventListener('paste', handlePaste);
+                } else {
+                     document.getElementById(id).addEventListener('paste', (e) => {
+                         // Basic paste handling for cost inputs if desired, or just let browser handle
+                         setTimeout(calculateCost, 0); // Recalculate after paste
+                     });
+                }
+            });
+            // Specific paste handler for inputTokens - remove from generic loop if it's only for one.
+            // Original code had it only for inputTokens. Let's keep it for inputTokens only for now.
+            document.getElementById(elIds.inputTokens).removeEventListener('paste', handlePaste); // remove generic one
+            document.getElementById(elIds.inputTokens).addEventListener('paste', handlePaste); // add specific one
+
+        });
     </script>
 </body>
 </html>
+
