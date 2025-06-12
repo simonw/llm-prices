@@ -215,77 +215,47 @@
     </div>
 
     <script>
-        // Prices are $ per 1M tokens
-        const presets = {
-            'gemini-2.5-pro-preview-03-25': { name: 'Gemini 2.5 Pro Preview ≤200k', input: 1.25, output: 10.00 },
-            'gemini-2.5-pro-preview-03-25-200k': { name: 'Gemini 2.5 Pro Preview >200k', input: 2.50, output: 15.00 },
-            'gemini-2.0-flash-lite': { name: 'Gemini 2.0 Flash Lite', input: 0.075, output: 0.30 },
-            'gemini-2.0-flash': { name: 'Gemini 2.0 Flash', input: 0.10, output: 0.40 },
-            'gemini-1.5-flash': { name: 'Gemini 1.5 Flash ≤128k', input: 0.075, output: 0.30 },
-            'gemini-1.5-flash-128k': { name: 'Gemini 1.5 Flash >128k', input: 0.15, output: 0.60 },
-            'gemini-1.5-flash-8b': { name: 'Gemini 1.5 Flash-8B ≤128k', input: 0.0375, output: 0.15 },
-            'gemini-1.5-flash-8b-128k': { name: 'Gemini 1.5 Flash-8B >128k', input: 0.075, output: 0.30 },
-            'gemini-1.5-pro': { name: 'Gemini 1.5 Pro ≤128k', input: 1.25, output: 5.00 },
-            'gemini-1.5-pro-128k': { name: 'Gemini 1.5 Pro >128k', input: 2.50, output: 10.00 },
-            'claude-opus-4': { name: 'Claude Opus 4', input: 15.00, output: 75.00 },
-            'claude-sonnet-4': { name: 'Claude Sonnet 4', input: 3.00, output: 15.00 },
-            'claude-3.7-sonnet': { name: 'Claude 3.7 Sonnet', input: 3.00, output: 15.00 },
-            'claude-3.5-sonnet': { name: 'Claude 3.5 Sonnet', input: 3.00, output: 15.00 },
-            'claude-3-opus': { name: 'Claude 3 Opus', input: 15.00, output: 75.00 },
-            'claude-3-haiku': { name: 'Claude 3 Haiku', input: 0.25, output: 1.25 },
-            'claude-3.5-haiku': { name: 'Claude 3.5 Haiku', input: 0.80, output: 4.00 },
-            'gpt-4.5': { name: 'GPT-4.5', input: 75.00, output: 150.00 },
-            'gpt-4o': { name: 'GPT-4o', input: 2.50, output: 10.00 },
-            'gpt-4o-mini': { name: 'GPT-4o Mini', input: 0.150, output: 0.600 },
-            'chatgpt-4o-latest': { name: 'ChatGPT 4o Latest', input: 5.00, output: 15.00 },
-            'o1-preview': { name: 'o1 and o1-preview', input: 15.00, output: 60.00 },
-            'o1-pro': { name: 'o1 Pro', input: 150.00, output: 600.00 },
-            'o1-mini': { name: 'o1-mini', input: 1.10, output: 4.40 },
-            'o3-mini': { name: 'o3-mini', input: 1.10, output: 4.40 },
-            'amazon-nova-micro': { name: 'Amazon Nova Micro', input: 0.035, output: 0.14 },
-            'amazon-nova-lite': { name: 'Amazon Nova Lite', input: 0.06, output: 0.24 },
-            'amazon-nova-pro': { name: 'Amazon Nova Pro', input: 0.8, output: 3.2 },
-            'amazon-nova-premier': { name: 'Amazon Nova Premier', input: 2.5, output: 12.5 },
-            'deepseek-chat': { 
-                name: 'DeepSeek Chat',
-                getPrice: () => {
-                    const cutoffDate = new Date('2025-02-08T16:00:00Z');
-                    const currentDate = new Date();
-                    
-                    if (currentDate < cutoffDate) {
-                        return { input: 0.14, output: 0.28 };
+        // Prices are $ per 1M tokens - loaded from prices.json
+        let presets = {};
+
+        // Load model data from JSON file
+        async function loadModelData() {
+            try {
+                const response = await fetch('./prices.json');
+                const modelsData = await response.json();
+                
+                // Transform JSON data to match original presets structure
+                for (const [key, model] of Object.entries(modelsData)) {
+                    if (model.dynamicPricing) {
+                        // Handle dynamic pricing (DeepSeek Chat)
+                        presets[key] = {
+                            name: model.name,
+                            getPrice: () => {
+                                const cutoffDate = new Date(model.dynamicPricing.cutoffDate);
+                                const currentDate = new Date();
+                                
+                                if (currentDate < cutoffDate) {
+                                    return model.dynamicPricing.beforeCutoff;
+                                } else {
+                                    return model.dynamicPricing.afterCutoff;
+                                }
+                            }
+                        };
                     } else {
-                        return { input: 0.27, output: 1.10 };
+                        // Regular static pricing
+                        presets[key] = {
+                            name: model.name,
+                            input: model.input,
+                            output: model.output
+                        };
                     }
                 }
-            },
-            'deepseek-reasoner': { name: 'DeepSeek Reasoner', input: 0.55, output: 2.19 },
-            'pixtral-12b': { name: 'Pixtral 12B', input: 0.15, output: 0.15 },
-            'mistral-small-latest': { name: 'Mistral Small 3.1', input: 0.1, output: 0.3 },
-            'mistral-medium-2505': { name: 'Mistral Medium 3', input: 0.4, output: 2 },
-            'mistral-nemo': { name: 'Mistral NeMo', input: 0.15, output: 0.15 },
-            'open-mistral-7b': { name: 'Mistral 7B', input: 0.25, output: 0.25 },
-            'open-mixtral-8x7b': { name: 'Mixtral 8x7B', input: 0.7, output: 0.7 },
-            'open-mixtral-8x22b': { name: 'Mixtral 8x22B', input: 2, output: 6 },
-            'mistral-large-latest': { name: 'Mistral Large 24.11', input: 2, output: 6 },
-            'magistral-medium-latest': { name: 'Magistral Medium', input: 2, output: 5 },
-            'pixtral-large-latest': { name: 'Pixtral Large', input: 2, output: 6 },
-            'mistral-saba-latest': { name: 'Mistral Saba', input: 0.2, output: 0.6 },
-            'codestral-latest': { name: 'Codestral', input: 0.3, output: 0.9 },
-            'ministral-8b-latest': { name: 'Ministral 8B 24.10', input: 0.1, output: 0.1 },
-            'ministral-3b-latest': { name: 'Ministral 3B 24.10', input: 0.04, output: 0.04 },
-            'grok-3-beta': { name: 'Grok 3 Beta', input: 3.00, output: 15.00 },
-            'grok-3-mini-beta': { name: 'Grok 3 Mini Beta', input: 0.30, output: 0.50 },
-            'gpt-4.1': { name: 'GPT 4.1', input: 2.00, output: 8.00 },
-            'gpt-4.1-mini': { name: 'GPT 4.1 Mini', input: 0.40, output: 1.60 },
-            'gpt-4.1-nano': { name: 'GPT 4.1 Nano', input: 0.10, output: 0.40 },
-            'o3': { name: 'o3', input: 2, output: 8 },
-            'o3-pro': { name: 'o3 Pro', input: 20, output: 80 },
-            'o4-mini': { name: 'o4-mini', input: 1.1, output: 4.4 },
-            'gemini-2.5-flash': { name: 'Gemini 2.5 Flash', input: 0.15, output: 0.60 },
-            'gemini-2.5-flash-thinking': { name: 'Gemini 2.5 Flash Thinking', input: 0.15, output: 3.50 },
-            'gpt-image-1': { name: 'gpt-image-1 (image gen)', input: 10, output: 40 },
-        };
+            } catch (error) {
+                console.error('Failed to load model data:', error);
+                // Fallback to empty presets if JSON loading fails
+                presets = {};
+            }
+        }
 
         // Global state variables for sorting
         let currentSortColumn = 'input'; // Default sort column: 'name', 'input', or 'output'
@@ -543,7 +513,8 @@
         window.setPreset = setPreset;
 
         // Initialize on DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadModelData();     // 0. Load model data from JSON first
             applyStateFromHash();      // 1. Apply state from URL hash first (updates globals)
             createPresetsTableStructure(); // 2. Setup table structure & initial render using (potentially updated) globals
             calculateCost();           // 3. Initial calculation and URL hash update based on current state
