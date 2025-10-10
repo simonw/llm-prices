@@ -12,7 +12,12 @@ The pricing data is available as JSON at the following URLs:
 
 **https://www.llm-prices.com/current.json**
 
-An array of objects representing the current pricing for each model. Each object contains:
+An object containing:
+
+- `updated_at`: Date when the pricing data was last updated (ISO 8601 format)
+- `prices`: Array of objects representing the current pricing for each model
+
+Each price object contains:
 
 - `id`: Unique identifier for the model
 - `vendor`: The vendor/provider name
@@ -23,29 +28,36 @@ An array of objects representing the current pricing for each model. Each object
 Example:
 
 ```json
-[
-  {
-    "id": "amazon-nova-micro",
-    "vendor": "amazon",
-    "name": "Amazon Nova Micro",
-    "input": 0.035,
-    "output": 0.14
-  },
-  {
-    "id": "amazon-nova-lite",
-    "vendor": "amazon",
-    "name": "Amazon Nova Lite",
-    "input": 0.06,
-    "output": 0.24
-  }
-]
+{
+  "updated_at": "2025-10-10",
+  "prices": [
+    {
+      "id": "amazon-nova-micro",
+      "vendor": "amazon",
+      "name": "Amazon Nova Micro",
+      "input": 0.035,
+      "output": 0.14
+    },
+    {
+      "id": "amazon-nova-lite",
+      "vendor": "amazon",
+      "name": "Amazon Nova Lite",
+      "input": 0.06,
+      "output": 0.24
+    }
+  ]
+}
 ```
 
 ### Historical prices
 
 **https://www.llm-prices.com/historical.json**
 
-An array of objects representing all pricing records including historical changes. Each object contains the same fields as current prices plus:
+An object containing:
+
+- `prices`: Array of objects representing all pricing records including historical changes
+
+Each price object contains the same fields as current prices plus:
 
 - `from_date`: Start date for this pricing (ISO 8601 format, or `null` for current prices). This date is inclusive.
 - `to_date`: End date for this pricing (ISO 8601 format, or `null` for current prices). This date is exclusive - the price was valid up to but not including this date.
@@ -53,26 +65,28 @@ An array of objects representing all pricing records including historical change
 Example:
 
 ```json
-[
-  {
-    "id": "amazon-nova-lite",
-    "vendor": "amazon",
-    "name": "Amazon Nova Lite",
-    "input": 0.06,
-    "output": 0.24,
-    "from_date": null,
-    "to_date": null
-  },
-  {
-    "id": "amazon-nova-micro",
-    "vendor": "amazon",
-    "name": "Amazon Nova Micro",
-    "input": 0.035,
-    "output": 0.14,
-    "from_date": null,
-    "to_date": null
-  }
-]
+{
+  "prices": [
+    {
+      "id": "amazon-nova-lite",
+      "vendor": "amazon",
+      "name": "Amazon Nova Lite",
+      "input": 0.06,
+      "output": 0.24,
+      "from_date": null,
+      "to_date": null
+    },
+    {
+      "id": "amazon-nova-micro",
+      "vendor": "amazon",
+      "name": "Amazon Nova Micro",
+      "input": 0.035,
+      "output": 0.14,
+      "from_date": null,
+      "to_date": null
+    }
+  ]
+}
 ```
 
 ## How the data files work
