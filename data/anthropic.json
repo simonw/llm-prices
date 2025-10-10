@@ -68,7 +68,7 @@
     },
     {
       "id": "claude-sonnet-4.5",
-      "name": "Claude Sonnet 4.5 ≤200k",
+      "name": "Claude Sonnet 4 and 4.5 ≤200k",
       "price_history": [
         {
           "input": 3,
@@ -81,7 +81,7 @@
     },
     {
       "id": "claude-sonnet-4.5-200k",
-      "name": "Claude Sonnet 4.5 >200k",
+      "name": "Claude Sonnet 4 and 4.5 >200k",
       "price_history": [
         {
           "input": 6,
