@@ -211,7 +211,7 @@
             </div>
         </div>
 
-        <div class="disclaimer">Prices may have changed since this tool was last updated.</div>
+        <div class="disclaimer">Prices last updated: <span id="lastUpdated">Loading...</span></div>
     </div>
 
     <script>
@@ -473,9 +473,15 @@
                     };
                 });
 
+                // Update the last updated date in the footer
+                if (data.updated_at) {
+                    document.getElementById('lastUpdated').textContent = data.updated_at;
+                }
+
                 return true;
             } catch (error) {
                 console.error('Error loading models:', error);
+                document.getElementById('lastUpdated').textContent = 'Unknown';
                 return false;
             }
         }
