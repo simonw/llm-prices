@@ -10,7 +10,7 @@ The pricing data is available as JSON at the following URLs:
 
 ### Current prices
 
-**https://www.llm-prices.com/current.json**
+**https://www.llm-prices.com/current-v1.json**
 
 An object containing:
 
@@ -54,7 +54,7 @@ Example:
 
 ### Historical prices
 
-**https://www.llm-prices.com/historical.json**
+**https://www.llm-prices.com/historical-v1.json**
 
 An object containing:
 
@@ -154,4 +154,4 @@ After editing vendor files in `data/`, run:
 python scripts/build.py
 ```
 
-This generates `current.json` and `historical.json` files that are served on the website.
+This generates `current-v1.json` and `historical-v1.json` files that are served on the website.

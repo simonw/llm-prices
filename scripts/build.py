@@ -14,8 +14,8 @@ print('Building JSON files...\n')
 data_dir = project_dir / 'data'
 vendor_files = sorted([f for f in data_dir.iterdir() if f.suffix == '.json'])
 
-# Build current.json
-print('Building current.json...')
+# Build current-v1.json
+print('Building current-v1.json...')
 current_prices = []
 
 for file in vendor_files:
@@ -40,14 +40,14 @@ current_json = {
     'prices': current_prices
 }
 
-output_path = project_dir / 'current.json'
+output_path = project_dir / 'current-v1.json'
 with open(output_path, 'w', encoding='utf-8') as f:
     json.dump(current_json, f, indent=2, ensure_ascii=False)
 
-print(f"Created current.json with {len(current_prices)} models")
+print(f"Created current-v1.json with {len(current_prices)} models")
 
-# Build historical.json
-print('Building historical.json...')
+# Build historical-v1.json
+print('Building historical-v1.json...')
 historical_prices = []
 
 # Re-read vendor files to get all price history
@@ -91,10 +91,10 @@ historical_json = {
     'prices': historical_prices
 }
 
-output_path = project_dir / 'historical.json'
+output_path = project_dir / 'historical-v1.json'
 with open(output_path, 'w', encoding='utf-8') as f:
     json.dump(historical_json, f, indent=2, ensure_ascii=False)
 
-print(f"Created historical.json with {len(historical_prices)} price records")
+print(f"Created historical-v1.json with {len(historical_prices)} price records")
 
 print('\n✓ Build complete!')
