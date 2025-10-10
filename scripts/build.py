@@ -10,34 +10,29 @@ project_dir = script_dir.parent
 
 print('Building JSON files...\n')
 
-# Read the original models.json to preserve order
-models_path = project_dir / 'models.json'
-with open(models_path, 'r', encoding='utf-8') as f:
-    models_json = json.load(f)
-
 # Read all vendor JSON files
 data_dir = project_dir / 'data'
-vendor_files = [f for f in data_dir.iterdir() if f.suffix == '.json']
-
-# Build a map of id -> vendor
-id_to_vendor = {}
-for file in vendor_files:
-    with open(file, 'r', encoding='utf-8') as f:
-        vendor_data = json.load(f)
-    for model in vendor_data['models']:
-        id_to_vendor[model['id']] = vendor_data['vendor']
+vendor_files = sorted([f for f in data_dir.iterdir() if f.suffix == '.json'])
 
 # Build current.json
 print('Building current.json...')
 current_prices = []
-for model in models_json:
-    current_prices.append({
-        'id': model['key'],
-        'vendor': id_to_vendor.get(model['key'], 'unknown'),
-        'name': model['name'],
-        'input': model['input'],
-        'output': model['output']
-    })
+
+for file in vendor_files:
+    with open(file, 'r', encoding='utf-8') as f:
+        vendor_data = json.load(f)
+
+    for model in vendor_data['models']:
+        # Find current price (where to_date is null)
+        current_price = next((p for p in model['price_history'] if p['to_date'] is None), None)
+        if current_price:
+            current_prices.append({
+                'id': model['id'],
+                'vendor': vendor_data['vendor'],
+                'name': model['name'],
+                'input': current_price['input'],
+                'output': current_price['output']
+            })
 
 current_json = {
     'updated_at': date.today().isoformat(),
