@@ -147,6 +147,20 @@
             text-align: center;
             font-style: italic;
         }
+        .search-filter {
+            margin-bottom: 15px;
+        }
+        #modelSearch {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        #modelSearch:focus {
+            outline: 2px solid #0066cc;
+            border-color: #0066cc;
+        }
     </style>
     <script defer data-domain="llm-prices.com" src="https://plausible.io/js/script.js"></script>
 </head>
@@ -187,6 +201,9 @@
 
             <div class="presets">
                 <h2>Model prices (per million tokens)</h2>
+                <div class="search-filter">
+                    <input type="search" id="modelSearch" placeholder="Search models..." aria-label="Search models">
+                </div>
                 <div id="presetTable">
                     <table class="preset-table">
                         <thead>
@@ -234,6 +251,7 @@
         // Global state variables for sorting
         let currentSortColumn = 'input'; // Default sort column: 'name', 'input', or 'output'
         let currentSortDirection = 'ascending'; // 'ascending' or 'descending'
+        let currentSearchTerm = ''; // Current search filter
 
         // Form field IDs
         const elIds = {
@@ -329,9 +347,33 @@
             return `$${price.toFixed(2)}`;
         }
 
+        function matchesSearch(modelName, searchTerm) {
+            if (!searchTerm) return true;
+
+            // Split search term on spaces and create regex pattern
+            const terms = searchTerm.trim().split(/\s+/).filter(t => t.length > 0);
+            if (terms.length === 0) return true;
+
+            // Escape special regex characters in each term
+            const escapedTerms = terms.map(term =>
+                term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            );
+
+            // Create pattern: first-term.*next-term.*last-term
+            const pattern = escapedTerms.join('.*');
+            const regex = new RegExp(pattern, 'i'); // case-insensitive
+
+            return regex.test(modelName);
+        }
+
         function getSortedPresetList(sortCol, sortDir) {
             const presetList = [];
             for (const [key, preset] of Object.entries(presets)) {
+                // Apply search filter
+                if (!matchesSearch(preset.name, currentSearchTerm)) {
+                    continue;
+                }
+
                 presetList.push({
                     key: key,
                     name: preset.name,
@@ -461,12 +503,33 @@
             // If no sort params in hash, defaults currentSortColumn/Direction are used
         }
 
+        function handleSearchInput(event) {
+            currentSearchTerm = event.target.value;
+            updateTableSortVisualsAndData();
+        }
+
+        function handleSearchKeydown(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                // Find the first model button in the table and click it
+                const firstModelButton = document.querySelector('#presetTableBody .model-name-btn');
+                if (firstModelButton) {
+                    firstModelButton.click();
+                }
+            }
+        }
+
         function createPresetsTableStructure() {
             // Event listeners for sort buttons
             document.getElementById(elIds.sortByName).addEventListener('click', () => sortTable('name'));
             document.getElementById(elIds.sortByInput).addEventListener('click', () => sortTable('input'));
             document.getElementById(elIds.sortByOutput).addEventListener('click', () => sortTable('output'));
-            
+
+            // Event listeners for search input
+            const searchInput = document.getElementById('modelSearch');
+            searchInput.addEventListener('input', handleSearchInput);
+            searchInput.addEventListener('keydown', handleSearchKeydown);
+
             // Initial render based on currentSortColumn and currentSortDirection
             // (which might have been updated by applyStateFromHash)
             updateTableSortVisualsAndData();
