@@ -31,7 +31,8 @@ for file in vendor_files:
                 'vendor': vendor_data['vendor'],
                 'name': model['name'],
                 'input': current_price['input'],
-                'output': current_price['output']
+                'output': current_price['output'],
+                'input_cached': current_price.get('input_cached')
             })
 
 current_json = {
@@ -63,6 +64,7 @@ for file in vendor_files:
                 'name': model['name'],
                 'input': price_record['input'],
                 'output': price_record['output'],
+                'input_cached': price_record.get('input_cached'),
                 'from_date': price_record['from_date'],
                 'to_date': price_record['to_date']
             })

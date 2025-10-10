@@ -156,16 +156,24 @@
             <div class="calculator">
                 <h1>LLM pricing calculator</h1>
                 <div class="input-group">
-                    <label for="inputTokens">Number of input tokens (aka prompt tokens):</label>
+                    <label for="inputTokens">Number of input tokens<br><span style="font-size: 0.85em; color: #666;">(aka prompt tokens)</span></label>
                     <input type="number" id="inputTokens" min="0">
                 </div>
                 <div class="input-group">
-                    <label for="outputTokens">Number of output tokens (aka completion tokens):</label>
+                    <label for="cachedInputTokens">Number of cached input tokens</label>
+                    <input type="number" id="cachedInputTokens" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="outputTokens">Number of output tokens<br><span style="font-size: 0.85em; color: #666;">(aka completion tokens)</span></label>
                     <input type="number" id="outputTokens" min="0">
                 </div>
                 <div class="input-group">
                     <label for="inputCost">Cost per million input tokens ($):</label>
                     <input type="number" id="inputCost" min="0" step="0.000001">
+                </div>
+                <div class="input-group">
+                    <label for="cachedInputCost">Cost per million cached input tokens ($):</label>
+                    <input type="number" id="cachedInputCost" min="0" step="0.000001">
                 </div>
                 <div class="input-group">
                     <label for="outputCost">Cost per million output tokens ($):</label>
@@ -192,6 +200,7 @@
                                 <th aria-sort="ascending"> <!-- Default sort visually, JS will confirm -->
                                     <button type="button" id="sortByInput">
                                         Input cost
+                                        <span style="font-size: 0.85em; color: #666; font-weight: normal;">(Cached input cost)</span>
                                         <span class="sort-icon" aria-hidden="true">↑</span>
                                     </button>
                                 </th>
@@ -229,8 +238,10 @@
         // Form field IDs
         const elIds = {
             inputTokens: 'inputTokens',
+            cachedInputTokens: 'cachedInputTokens',
             outputTokens: 'outputTokens',
             inputCost: 'inputCost',
+            cachedInputCost: 'cachedInputCost',
             outputCost: 'outputCost',
             costDollars: 'costDollars',
             costCents: 'costCents',
@@ -243,8 +254,10 @@
         // Hash parameter keys (short for brevity in URL)
         const HASH_KEYS = {
             inputTokens: 'it',
+            cachedInputTokens: 'cit',
             outputTokens: 'ot',
             inputCost: 'ic',
+            cachedInputCost: 'cic',
             outputCost: 'oc',
             sortBy: 'sb',
             sortDir: 'sd'
@@ -253,13 +266,17 @@
         function updateUrlHash() {
             const params = new URLSearchParams();
             const inputTokensVal = document.getElementById(elIds.inputTokens).value;
+            const cachedInputTokensVal = document.getElementById(elIds.cachedInputTokens).value;
             const outputTokensVal = document.getElementById(elIds.outputTokens).value;
             const inputCostVal = document.getElementById(elIds.inputCost).value;
+            const cachedInputCostVal = document.getElementById(elIds.cachedInputCost).value;
             const outputCostVal = document.getElementById(elIds.outputCost).value;
 
             if (inputTokensVal && parseFloat(inputTokensVal) !== 0) params.set(HASH_KEYS.inputTokens, inputTokensVal);
+            if (cachedInputTokensVal && parseFloat(cachedInputTokensVal) !== 0) params.set(HASH_KEYS.cachedInputTokens, cachedInputTokensVal);
             if (outputTokensVal && parseFloat(outputTokensVal) !== 0) params.set(HASH_KEYS.outputTokens, outputTokensVal);
             if (inputCostVal && parseFloat(inputCostVal) !== 0) params.set(HASH_KEYS.inputCost, inputCostVal);
+            if (cachedInputCostVal && parseFloat(cachedInputCostVal) !== 0) params.set(HASH_KEYS.cachedInputCost, cachedInputCostVal);
             if (outputCostVal && parseFloat(outputCostVal) !== 0) params.set(HASH_KEYS.outputCost, outputCostVal);
 
             // Only add sort params if not the default sort to keep URL cleaner for default state
@@ -278,12 +295,14 @@
 
         function calculateCost() {
             const inputTokens = parseFloat(document.getElementById(elIds.inputTokens).value) || 0;
+            const cachedInputTokens = parseFloat(document.getElementById(elIds.cachedInputTokens).value) || 0;
             const outputTokens = parseFloat(document.getElementById(elIds.outputTokens).value) || 0;
             const inputCost = parseFloat(document.getElementById(elIds.inputCost).value) || 0;
+            const cachedInputCost = parseFloat(document.getElementById(elIds.cachedInputCost).value) || 0;
             const outputCost = parseFloat(document.getElementById(elIds.outputCost).value) || 0;
 
-            const totalCost = (inputTokens * inputCost / 1000000) + (outputTokens * outputCost / 1000000);
-            
+            const totalCost = (inputTokens * inputCost / 1000000) + (cachedInputTokens * cachedInputCost / 1000000) + (outputTokens * outputCost / 1000000);
+
             document.getElementById(elIds.costDollars).textContent = totalCost.toFixed(6);
             document.getElementById(elIds.costCents).textContent = trimZeros((totalCost * 100).toFixed(4));
             updateUrlHash();
@@ -298,6 +317,7 @@
             if (!preset) return;
 
             document.getElementById(elIds.inputCost).value = preset.input;
+            document.getElementById(elIds.cachedInputCost).value = preset.input_cached || '';
             document.getElementById(elIds.outputCost).value = preset.output;
             calculateCost(); // This will also call updateUrlHash
         }
@@ -316,7 +336,8 @@
                     key: key,
                     name: preset.name,
                     input: preset.input,
-                    output: preset.output
+                    output: preset.output,
+                    input_cached: preset.input_cached
                 });
             }
 
@@ -346,13 +367,18 @@
         function renderTable(data) {
             const presetTableBody = document.getElementById(elIds.presetTableBody);
             presetTableBody.innerHTML = ''; // Clear existing rows
-            
+
             data.forEach(item => {
                 const row = document.createElement('tr');
+                // Format input cost with cached price if available
+                let inputCostDisplay = formatPrice(item.input);
+                if (item.input_cached !== null && item.input_cached !== undefined) {
+                    inputCostDisplay += ` <span style="font-size: 0.85em; color: #666;">(${formatPrice(item.input_cached)})</span>`;
+                }
                 // Note: onclick now calls window.setPreset because these are dynamically added
                 row.innerHTML = `
                     <td><button class="model-name-btn" onclick="window.setPreset('${item.key}')">${item.name}</button></td>
-                    <td>${formatPrice(item.input)}</td>
+                    <td>${inputCostDisplay}</td>
                     <td>${formatPrice(item.output)}</td>
                 `;
                 presetTableBody.appendChild(row);
@@ -403,13 +429,17 @@
             const params = new URLSearchParams(window.location.hash.substring(1));
 
             const inputTokensEl = document.getElementById(elIds.inputTokens);
+            const cachedInputTokensEl = document.getElementById(elIds.cachedInputTokens);
             const outputTokensEl = document.getElementById(elIds.outputTokens);
             const inputCostEl = document.getElementById(elIds.inputCost);
+            const cachedInputCostEl = document.getElementById(elIds.cachedInputCost);
             const outputCostEl = document.getElementById(elIds.outputCost);
 
             if (params.has(HASH_KEYS.inputTokens)) inputTokensEl.value = params.get(HASH_KEYS.inputTokens);
+            if (params.has(HASH_KEYS.cachedInputTokens)) cachedInputTokensEl.value = params.get(HASH_KEYS.cachedInputTokens);
             if (params.has(HASH_KEYS.outputTokens)) outputTokensEl.value = params.get(HASH_KEYS.outputTokens);
             if (params.has(HASH_KEYS.inputCost)) inputCostEl.value = params.get(HASH_KEYS.inputCost);
+            if (params.has(HASH_KEYS.cachedInputCost)) cachedInputCostEl.value = params.get(HASH_KEYS.cachedInputCost);
             if (params.has(HASH_KEYS.outputCost)) outputCostEl.value = params.get(HASH_KEYS.outputCost);
 
             const sortByFromHash = params.get(HASH_KEYS.sortBy);
@@ -473,7 +503,8 @@
                     presets[model.id] = {
                         name: model.name,
                         input: model.input,
-                        output: model.output
+                        output: model.output,
+                        input_cached: model.input_cached
                     };
                 });
 
@@ -501,11 +532,11 @@
             calculateCost();           // 3. Initial calculation and URL hash update based on current state
 
             // Add event listeners to form inputs
-            const formInputs = [elIds.inputTokens, elIds.outputTokens, elIds.inputCost, elIds.outputCost];
+            const formInputs = [elIds.inputTokens, elIds.cachedInputTokens, elIds.outputTokens, elIds.inputCost, elIds.cachedInputCost, elIds.outputCost];
             formInputs.forEach(id => {
                 document.getElementById(id).addEventListener('input', calculateCost);
                 // Add paste listener only to token inputs as per original logic
-                if (id === elIds.inputTokens || id === elIds.outputTokens) {
+                if (id === elIds.inputTokens || id === elIds.cachedInputTokens || id === elIds.outputTokens) {
                      document.getElementById(id).addEventListener('paste', handlePaste);
                 } else {
                      document.getElementById(id).addEventListener('paste', (e) => {

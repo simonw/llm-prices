@@ -9,7 +9,8 @@
           "input": 0.15,
           "output": 0.15,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -21,7 +22,8 @@
           "input": 0.1,
           "output": 0.3,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -33,7 +35,8 @@
           "input": 0.4,
           "output": 2,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -45,7 +48,8 @@
           "input": 0.15,
           "output": 0.15,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -57,7 +61,8 @@
           "input": 0.25,
           "output": 0.25,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -69,7 +74,8 @@
           "input": 0.7,
           "output": 0.7,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -81,7 +87,8 @@
           "input": 2,
           "output": 6,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -93,7 +100,8 @@
           "input": 2,
           "output": 6,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -105,7 +113,8 @@
           "input": 2,
           "output": 6,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -117,7 +126,8 @@
           "input": 0.2,
           "output": 0.6,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -129,7 +139,8 @@
           "input": 0.3,
           "output": 0.9,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -141,7 +152,8 @@
           "input": 0.1,
           "output": 0.1,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -153,7 +165,8 @@
           "input": 0.04,
           "output": 0.04,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -165,7 +178,8 @@
           "input": 2,
           "output": 5,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     }

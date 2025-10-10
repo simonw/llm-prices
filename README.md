@@ -24,6 +24,7 @@ Each price object contains:
 - `name`: Human-readable model name
 - `input`: Price per million input tokens (in USD)
 - `output`: Price per million output tokens (in USD)
+- `input_cached`: Price per million cached input tokens (in USD), or `null` if the model does not offer cached token pricing
 
 Example:
 
@@ -36,14 +37,16 @@ Example:
       "vendor": "amazon",
       "name": "Amazon Nova Micro",
       "input": 0.035,
-      "output": 0.14
+      "output": 0.14,
+      "input_cached": null
     },
     {
       "id": "amazon-nova-lite",
       "vendor": "amazon",
       "name": "Amazon Nova Lite",
       "input": 0.06,
-      "output": 0.24
+      "output": 0.24,
+      "input_cached": null
     }
   ]
 }
@@ -73,6 +76,7 @@ Example:
       "name": "Amazon Nova Lite",
       "input": 0.06,
       "output": 0.24,
+      "input_cached": null,
       "from_date": null,
       "to_date": null
     },
@@ -82,6 +86,7 @@ Example:
       "name": "Amazon Nova Micro",
       "input": 0.035,
       "output": 0.14,
+      "input_cached": null,
       "from_date": null,
       "to_date": null
     }
@@ -106,6 +111,7 @@ Each vendor file has the following structure:
         {
           "input": 3,
           "output": 15,
+          "input_cached": null,
           "from_date": null,
           "to_date": null
         }
@@ -124,6 +130,7 @@ Each vendor file has the following structure:
   - `price_history`: Array of pricing records over time, each with:
     - `input`: Price per million input tokens (in USD)
     - `output`: Price per million output tokens (in USD)
+    - `input_cached`: Price per million cached input tokens (in USD), or `null` if the model does not offer cached token pricing
     - `from_date`: Start date for this pricing (ISO 8601 format, or `null` for current/initial prices)
     - `to_date`: End date for this pricing (ISO 8601 format, or `null` for current prices)
 

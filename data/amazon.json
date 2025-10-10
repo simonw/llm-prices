@@ -9,7 +9,8 @@
           "input": 0.035,
           "output": 0.14,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -21,7 +22,8 @@
           "input": 0.06,
           "output": 0.24,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -33,7 +35,8 @@
           "input": 0.8,
           "output": 3.2,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     },
@@ -45,7 +48,8 @@
           "input": 2.5,
           "output": 12.5,
           "from_date": null,
-          "to_date": null
+          "to_date": null,
+          "input_cached": null
         }
       ]
     }
