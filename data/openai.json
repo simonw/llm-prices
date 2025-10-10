@@ -218,7 +218,20 @@
           "output": 40,
           "from_date": null,
           "to_date": null,
-          "input_cached": 2.5
+          "input_cached": 1.25
+        }
+      ]
+    },
+    {
+      "id": "gpt-image-1-mini",
+      "name": "gpt-image-1-mini (image gen)",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 8,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.2
         }
       ]
     },
