@@ -133,4 +133,18 @@ When a model's price changes, add a new entry to the `price_history` array:
 - Set the `to_date` on the previous entry to the date the old price ended
 - Add a new entry with the new prices, setting `from_date` to when the new price starts and `to_date` to `null`
 
-The build scripts process these vendor files to generate the `current.json` and `historical.json` files that are served on the website.
+#### Date semantics
+
+- `from_date`: Inclusive start date (price is effective starting from this date)
+- `to_date`: Exclusive end date (price is effective up to but NOT including this date)
+- `null` dates: `from_date: null` means "from the beginning", `to_date: null` means "current price"
+
+### Building the JSON files
+
+After editing vendor files in `data/`, run:
+
+```bash
+python scripts/build.py
+```
+
+This generates `current.json` and `historical.json` files that are served on the website.
