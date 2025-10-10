@@ -1,0 +1,65 @@
+{
+  "vendor": "xai",
+  "models": [
+    {
+      "id": "grok-3-beta",
+      "name": "Grok 3 Beta",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "grok-3-mini-beta",
+      "name": "Grok 3 Mini Beta",
+      "price_history": [
+        {
+          "input": 0.3,
+          "output": 0.5,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "grok-4-fast",
+      "name": "Grok 4 Fast",
+      "price_history": [
+        {
+          "input": 0.2,
+          "output": 0.5,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "grok-4",
+      "name": "Grok 4 ≤128k",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "grok-4-128k",
+      "name": "Grok 4 >128k",
+      "price_history": [
+        {
+          "input": 6,
+          "output": 30,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    }
+  ]
+}

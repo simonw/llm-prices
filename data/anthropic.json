@@ -1,0 +1,101 @@
+{
+  "vendor": "anthropic",
+  "models": [
+    {
+      "id": "claude-3.7-sonnet",
+      "name": "Claude 3.7 Sonnet",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "claude-3.5-sonnet",
+      "name": "Claude 3.5 Sonnet",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "claude-3-opus",
+      "name": "Claude 3 Opus",
+      "price_history": [
+        {
+          "input": 15,
+          "output": 75,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "claude-3-haiku",
+      "name": "Claude 3 Haiku",
+      "price_history": [
+        {
+          "input": 0.25,
+          "output": 1.25,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "claude-3.5-haiku",
+      "name": "Claude 3.5 Haiku",
+      "price_history": [
+        {
+          "input": 0.8,
+          "output": 4,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "claude-sonnet-4",
+      "name": "Claude Sonnet 4 ≤200k",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "claude-sonnet-4-200k",
+      "name": "Claude Sonnet 4 >200k",
+      "price_history": [
+        {
+          "input": 6,
+          "output": 22.5,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    },
+    {
+      "id": "claude-opus-4",
+      "name": "Claude Opus 4 and 4.1",
+      "price_history": [
+        {
+          "input": 15,
+          "output": 75,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    }
+  ]
+}
