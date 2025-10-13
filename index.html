@@ -557,7 +557,7 @@
         // Load models from current.json
         async function loadModels() {
             try {
-                const response = await fetch('current.json');
+                const response = await fetch('current-v1.json');
                 const data = await response.json();
 
                 // Convert prices array to object with id as the key
