@@ -121,6 +121,11 @@
         .preset-table tr:hover {
             background-color: #f5f5f5;
         }
+        .model-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
         .model-name-btn {
             background-color: #e1f0ff;
             border: 1px solid #d0e5fa;
@@ -131,7 +136,7 @@
             text-align: left;
             padding: 5px 8px;
             font-family: inherit;
-            width: 100%;
+            flex: 1;
             text-decoration: none;
             transition: background-color 0.2s, border-color 0.2s;
         }
@@ -160,6 +165,32 @@
         #modelSearch:focus {
             outline: 2px solid #0066cc;
             border-color: #0066cc;
+        }
+        .note-icon-container {
+            width: 20px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .note-icon {
+            cursor: pointer;
+            display: block;
+        }
+        .note-icon:hover {
+            opacity: 0.7;
+        }
+        .notes-row {
+            background-color: #fffbea;
+        }
+        .notes-row td {
+            padding: 12px 10px;
+            font-size: 13px;
+            color: #555;
+            border-left: 3px solid #f39c12;
+        }
+        .notes-row.hidden {
+            display: none;
         }
     </style>
     <script defer data-domain="llm-prices.com" src="https://plausible.io/js/script.js"></script>
@@ -379,7 +410,8 @@
                     name: preset.name,
                     input: preset.input,
                     output: preset.output,
-                    input_cached: preset.input_cached
+                    input_cached: preset.input_cached,
+                    notes: preset.notes
                 });
             }
 
@@ -410,20 +442,46 @@
             const presetTableBody = document.getElementById(elIds.presetTableBody);
             presetTableBody.innerHTML = ''; // Clear existing rows
 
-            data.forEach(item => {
+            data.forEach((item, index) => {
                 const row = document.createElement('tr');
                 // Format input cost with cached price if available
                 let inputCostDisplay = formatPrice(item.input);
                 if (item.input_cached !== null && item.input_cached !== undefined) {
                     inputCostDisplay += ` <span style="font-size: 0.85em; color: #666;">(${formatPrice(item.input_cached)})</span>`;
                 }
+
+                // Create note icon container - always present for consistent spacing
+                let noteIconHtml = '';
+                if (item.notes) {
+                    noteIconHtml = `<svg class="note-icon" onclick="window.toggleNotes('notes-${index}')" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="color: #f39c12;" aria-label="Show notes">
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                        <path d="M5 6h6v1H5V6zm0 2h3v1H5V8z"/>
+                    </svg>`;
+                }
+
                 // Note: onclick now calls window.setPreset because these are dynamically added
                 row.innerHTML = `
-                    <td><button class="model-name-btn" onclick="window.setPreset('${item.key}')">${item.name}</button></td>
+                    <td>
+                        <div class="model-name-cell">
+                            <button class="model-name-btn" onclick="window.setPreset('${item.key}')">${item.name}</button>
+                            <div class="note-icon-container">${noteIconHtml}</div>
+                        </div>
+                    </td>
                     <td>${inputCostDisplay}</td>
                     <td>${formatPrice(item.output)}</td>
                 `;
                 presetTableBody.appendChild(row);
+
+                // Add notes row if notes exist
+                if (item.notes) {
+                    const notesRow = document.createElement('tr');
+                    notesRow.className = 'notes-row hidden';
+                    notesRow.id = `notes-${index}`;
+                    notesRow.innerHTML = `
+                        <td colspan="3">${item.notes}</td>
+                    `;
+                    presetTableBody.appendChild(notesRow);
+                }
             });
         }
         
@@ -519,6 +577,13 @@
             }
         }
 
+        function toggleNotes(notesId) {
+            const notesRow = document.getElementById(notesId);
+            if (notesRow) {
+                notesRow.classList.toggle('hidden');
+            }
+        }
+
         function createPresetsTableStructure() {
             // Event listeners for sort buttons
             document.getElementById(elIds.sortByName).addEventListener('click', () => sortTable('name'));
@@ -554,10 +619,10 @@
             }
         }
 
-        // Load models from current.json
+        // Load models from current-v1.json
         async function loadModels() {
             try {
-                const response = await fetch('current.json');
+                const response = await fetch('current-v1.json');
                 const data = await response.json();
 
                 // Convert prices array to object with id as the key
@@ -567,7 +632,8 @@
                         name: model.name,
                         input: model.input,
                         output: model.output,
-                        input_cached: model.input_cached
+                        input_cached: model.input_cached,
+                        notes: model.notes
                     };
                 });
 
@@ -584,8 +650,9 @@
             }
         }
 
-        // Make setPreset globally accessible for dynamically created buttons
+        // Make setPreset and toggleNotes globally accessible for dynamically created buttons
         window.setPreset = setPreset;
+        window.toggleNotes = toggleNotes;
 
         // Initialize on DOMContentLoaded
         document.addEventListener('DOMContentLoaded', async () => {
