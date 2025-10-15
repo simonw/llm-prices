@@ -66,6 +66,18 @@
         }
       ]
     },
+      "id": "claude-4.5-haiku",
+      "name": "Claude 4.5 Haiku",
+      "price_history": [
+        {
+          "input": 1,
+          "output": 5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
     {
       "id": "claude-sonnet-4.5",
       "name": "Claude Sonnet 4 and 4.5 ≤200k",
