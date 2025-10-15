@@ -66,6 +66,7 @@
         }
       ]
     },
+    {
       "id": "claude-4.5-haiku",
       "name": "Claude 4.5 Haiku",
       "price_history": [
