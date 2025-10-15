@@ -204,6 +204,12 @@
                 <div class="search-filter">
                     <input type="search" id="modelSearch" placeholder="Search models..." aria-label="Search models">
                 </div>
+                <div id="compareToggle" style="display: none; margin-bottom: 10px;">
+                    <label>
+                        <input type="checkbox" id="showOnlySelectedCheckbox">
+                        Show just selected
+                    </label>
+                </div>
                 <div id="presetTable">
                     <table class="preset-table">
                         <thead>
@@ -227,6 +233,7 @@
                                         <span class="sort-icon" aria-hidden="true"></span>
                                     </button>
                                 </th>
+                                <th>Compare</th>
                             </tr>
                         </thead>
                         <tbody id="presetTableBody">
@@ -253,6 +260,10 @@
         let currentSortDirection = 'ascending'; // 'ascending' or 'descending'
         let currentSearchTerm = ''; // Current search filter
 
+        // Global state variables for comparison
+        let selectedModels = new Set(); // Set of selected model keys
+        let showOnlySelected = false; // Whether to show only selected models
+
         // Form field IDs
         const elIds = {
             inputTokens: 'inputTokens',
@@ -278,7 +289,8 @@
             cachedInputCost: 'cic',
             outputCost: 'oc',
             sortBy: 'sb',
-            sortDir: 'sd'
+            sortDir: 'sd',
+            selected: 'sel'
         };
 
         function updateUrlHash() {
@@ -301,6 +313,11 @@
             if (!(currentSortColumn === 'input' && currentSortDirection === 'ascending')) {
                  params.set(HASH_KEYS.sortBy, currentSortColumn);
                  params.set(HASH_KEYS.sortDir, currentSortDirection);
+            }
+
+            // Add selected models if any
+            if (selectedModels.size > 0) {
+                params.set(HASH_KEYS.selected, Array.from(selectedModels).join(','));
             }
 
             const hashString = params.toString();
@@ -374,6 +391,11 @@
                     continue;
                 }
 
+                // Apply "show only selected" filter
+                if (showOnlySelected && !selectedModels.has(key)) {
+                    continue;
+                }
+
                 presetList.push({
                     key: key,
                     name: preset.name,
@@ -422,16 +444,83 @@
                     <td><button class="model-name-btn" onclick="window.setPreset('${item.key}')">${item.name}</button></td>
                     <td>${inputCostDisplay}</td>
                     <td>${formatPrice(item.output)}</td>
+                    <td><input type="checkbox" class="compare-checkbox" data-model-key="${item.key}" ${selectedModels.has(item.key) ? 'checked' : ''}></td>
                 `;
                 presetTableBody.appendChild(row);
             });
+
+            // Add event listeners to checkboxes
+            const checkboxes = presetTableBody.querySelectorAll('.compare-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', handleCheckboxChange);
+            });
+
+            // Add click handlers to rows for toggling checkboxes
+            const rows = presetTableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                row.addEventListener('click', handleRowClick);
+                row.style.cursor = 'pointer';
+            });
         }
-        
+
+        function handleRowClick(event) {
+            // Don't toggle if clicking on the model name button
+            if (event.target.closest('.model-name-btn')) {
+                return;
+            }
+
+            // Find the checkbox in this row
+            const checkbox = event.currentTarget.querySelector('.compare-checkbox');
+            if (checkbox) {
+                // Toggle the checkbox
+                checkbox.checked = !checkbox.checked;
+                // Trigger the change event
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        }
+
+        function handleCheckboxChange(event) {
+            const checkbox = event.target;
+            const modelKey = checkbox.dataset.modelKey;
+
+            if (checkbox.checked) {
+                selectedModels.add(modelKey);
+            } else {
+                selectedModels.delete(modelKey);
+            }
+
+            updateCompareToggleVisibility();
+            updateUrlHash();
+        }
+
+        function updateCompareToggleVisibility() {
+            const compareToggle = document.getElementById('compareToggle');
+            if (selectedModels.size >= 2) {
+                compareToggle.style.display = 'block';
+            } else {
+                compareToggle.style.display = 'none';
+                // If less than 2 selected, turn off "show only selected" mode
+                if (showOnlySelected) {
+                    showOnlySelected = false;
+                    document.getElementById('showOnlySelectedCheckbox').checked = false;
+                    updateTableSortVisualsAndData();
+                }
+            }
+        }
+
+        function handleShowOnlySelectedChange(event) {
+            showOnlySelected = event.target.checked;
+            updateTableSortVisualsAndData();
+        }
+
         function updateTableSortVisualsAndData() {
             const thElements = document.querySelectorAll('.preset-table th');
             thElements.forEach(th => {
                 th.setAttribute('aria-sort', 'none');
-                th.querySelector('.sort-icon').textContent = '';
+                const sortIcon = th.querySelector('.sort-icon');
+                if (sortIcon) {
+                    sortIcon.textContent = '';
+                }
             });
 
             let activeThButtonId;
@@ -491,7 +580,7 @@
             const validSortCols = ['name', 'input', 'output'];
             const validSortDirs = ['ascending', 'descending'];
 
-            if (sortByFromHash && validSortCols.includes(sortByFromHash) && 
+            if (sortByFromHash && validSortCols.includes(sortByFromHash) &&
                 sortDirFromHash && validSortDirs.includes(sortDirFromHash)) {
                 currentSortColumn = sortByFromHash;
                 currentSortDirection = sortDirFromHash;
@@ -501,6 +590,14 @@
                 currentSortDirection = 'ascending';
             }
             // If no sort params in hash, defaults currentSortColumn/Direction are used
+
+            // Restore selected models
+            if (params.has(HASH_KEYS.selected)) {
+                const selectedStr = params.get(HASH_KEYS.selected);
+                if (selectedStr) {
+                    selectedModels = new Set(selectedStr.split(',').filter(key => key.length > 0));
+                }
+            }
         }
 
         function handleSearchInput(event) {
@@ -530,9 +627,14 @@
             searchInput.addEventListener('input', handleSearchInput);
             searchInput.addEventListener('keydown', handleSearchKeydown);
 
+            // Event listener for "show only selected" checkbox
+            const showOnlySelectedCheckbox = document.getElementById('showOnlySelectedCheckbox');
+            showOnlySelectedCheckbox.addEventListener('change', handleShowOnlySelectedChange);
+
             // Initial render based on currentSortColumn and currentSortDirection
             // (which might have been updated by applyStateFromHash)
             updateTableSortVisualsAndData();
+            updateCompareToggleVisibility();
         }
 
         function handlePaste(event) {
