@@ -1,12 +1,29 @@
 #!/usr/bin/env python3
 
 import json
+import subprocess
 from datetime import date
 from pathlib import Path
 
 # Get script directory
 script_dir = Path(__file__).parent
 project_dir = script_dir.parent
+
+def get_data_folder_update_date():
+    """Get the commit date of the last commit that touched the data/ folder"""
+    result = subprocess.run(
+        ['git', 'log', '-1', '--format=%ci', '--', 'data/'],
+        cwd=project_dir,
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    commit_datetime = result.stdout.strip()
+    if not commit_datetime:
+        raise RuntimeError("Could not determine last commit date for data/ folder")
+
+    # Extract just the date part (YYYY-MM-DD) from the full datetime
+    return commit_datetime.split()[0]
 
 print('Building JSON files...\n')
 
@@ -36,7 +53,7 @@ for file in vendor_files:
             })
 
 current_json = {
-    'updated_at': date.today().isoformat(),
+    'updated_at': get_data_folder_update_date(),
     'prices': current_prices
 }
 
