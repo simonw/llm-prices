@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+
+import json
+import subprocess
+from datetime import date
+from pathlib import Path
+
+# Get script directory
+script_dir = Path(__file__).parent
+project_dir = script_dir.parent
+
+def get_data_folder_update_date():
+    """Get the commit date of the last commit that touched the data/ folder"""
+    result = subprocess.run(
+        ['git', 'log', '-1', '--format=%ci', '--', 'data/'],
+        cwd=project_dir,
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    commit_datetime = result.stdout.strip()
+    if not commit_datetime:
+        raise RuntimeError("Could not determine last commit date for data/ folder")
+
+    # Extract just the date part (YYYY-MM-DD) from the full datetime
+    return commit_datetime.split()[0]
+
+print('Building JSON files...\n')
+
+# Read all vendor JSON files
+data_dir = project_dir / 'data'
+vendor_files = sorted([f for f in data_dir.iterdir() if f.suffix == '.json'])
+
+# Build current-v1.json
+print('Building current-v1.json...')
+current_prices = []
+
+for file in vendor_files:
+    with open(file, 'r', encoding='utf-8') as f:
+        vendor_data = json.load(f)
+
+    for model in vendor_data['models']:
+        # Find current price (where to_date is null)
+        current_price = next((p for p in model['price_history'] if p['to_date'] is None), None)
+        if current_price:
+            current_prices.append({
+                'id': model['id'],
+                'vendor': vendor_data['vendor'],
+                'name': model['name'],
+                'input': current_price['input'],
+                'output': current_price['output'],
+                'input_cached': current_price.get('input_cached')
+            })
+
+current_json = {
+    'updated_at': get_data_folder_update_date(),
+    'prices': current_prices
+}
+
+output_path = project_dir / 'current-v1.json'
+with open(output_path, 'w', encoding='utf-8') as f:
+    json.dump(current_json, f, indent=2, ensure_ascii=False)
+
+print(f"Created current-v1.json with {len(current_prices)} models")
+
+# Build historical-v1.json
+print('Building historical-v1.json...')
+historical_prices = []
+
+# Re-read vendor files to get all price history
+for file in vendor_files:
+    with open(file, 'r', encoding='utf-8') as f:
+        vendor_data = json.load(f)
+
+    for model in vendor_data['models']:
+        # Include ALL price history records
+        for price_record in model['price_history']:
+            historical_prices.append({
+                'id': model['id'],
+                'vendor': vendor_data['vendor'],
+                'name': model['name'],
+                'input': price_record['input'],
+                'output': price_record['output'],
+                'input_cached': price_record.get('input_cached'),
+                'from_date': price_record['from_date'],
+                'to_date': price_record['to_date']
+            })
+
+# Sort by vendor, id, then by from_date (most recent first)
+def sort_key(item):
+    vendor_sort = item['vendor']
+    id_sort = item['id']
+
+    # Current prices (to_date: null) first, then by from_date descending
+    if item['to_date'] is None:
+        date_sort = (0, '')
+    else:
+        if item['from_date']:
+            date_sort = (1, item['from_date'])
+        else:
+            date_sort = (1, '')
+
+    return (vendor_sort, id_sort, date_sort[0], '' if date_sort[1] == '' else tuple(reversed(date_sort[1].split('-'))))
+
+historical_prices.sort(key=sort_key)
+
+historical_json = {
+    'prices': historical_prices
+}
+
+output_path = project_dir / 'historical-v1.json'
+with open(output_path, 'w', encoding='utf-8') as f:
+    json.dump(historical_json, f, indent=2, ensure_ascii=False)
+
+print(f"Created historical-v1.json with {len(historical_prices)} price records")
+
+print('\n✓ Build complete!')
