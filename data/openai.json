@@ -260,6 +260,32 @@
           "input_cached": null
         }
       ]
+    },
+    {
+      "id": "o4-mini-deep-research",
+      "name": "o4-mini Deep Research",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 8,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "o3-deep-research",
+      "name": "o3 Deep Research",
+      "price_history": [
+        {
+          "input": 10,
+          "output": 40,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
     }
   ]
 }
