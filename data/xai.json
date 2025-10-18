@@ -1,0 +1,135 @@
+{
+  "vendor": "xai",
+  "models": [
+    {
+      "id": "grok-3",
+      "name": "Grok 3",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.75
+        }
+      ]
+    },
+    {
+      "id": "grok-3-mini",
+      "name": "Grok 3 Mini",
+      "price_history": [
+        {
+          "input": 0.3,
+          "output": 0.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.075
+        }
+      ]
+    },
+    {
+      "id": "grok-4-fast",
+      "name": "Grok 4 Fast",
+      "price_history": [
+        {
+          "input": 0.2,
+          "output": 0.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.05
+        }
+      ]
+    },
+    {
+      "id": "grok-4",
+      "name": "Grok 4 ≤128k",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.75
+        }
+      ]
+    },
+    {
+      "id": "grok-4-128k",
+      "name": "Grok 4 >128k",
+      "price_history": [
+        {
+          "input": 6,
+          "output": 30,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.75
+        }
+      ]
+    },
+    {
+      "id": "grok-4-fast",
+      "name": "Grok 4 Fast ≤128k",
+      "price_history": [
+        {
+          "input": 0.20,
+          "output": 0.50,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.05
+        }
+      ]
+    },
+    {
+      "id": "grok-4-fast-128k",
+      "name": "Grok 4 Fast >128k",
+      "price_history": [
+        {
+          "input": 0.40,
+          "output": 1.00,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.05
+        }
+      ]
+    },
+    {
+      "id": "grok-4-fast-reasoning",
+      "name": "Grok 4 Fast Reasoning ≤128k",
+      "price_history": [
+        {
+          "input": 0.20,
+          "output": 0.50,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.05
+        }
+      ]
+    },
+    {
+      "id": "grok-4-fast-reasoning-128k",
+      "name": "Grok 4 Fast Reasoning >128k",
+      "price_history": [
+        {
+          "input": 0.40,
+          "output": 1.00,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.05
+        }
+      ]
+    },
+    {
+      "id": "grok-code-fast-1",
+      "name": "Grok Code Fast 1",
+      "price_history": [
+        {
+          "input": 0.2,
+          "output": 1.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.02
+        }
+      ]
+    }
+  ]
+}

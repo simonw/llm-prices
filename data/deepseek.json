@@ -1,0 +1,38 @@
+{
+  "vendor": "deepseek",
+  "models": [
+    {
+      "id": "deepseek-chat",
+      "name": "DeepSeek Chat",
+      "price_history": [
+        {
+          "input": 0.27,
+          "output": 1.1,
+          "from_date": "2025-02-08",
+          "to_date": null,
+          "input_cached": null
+        },
+        {
+          "input": 0.14,
+          "output": 0.28,
+          "from_date": null,
+          "to_date": "2025-02-08",
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "deepseek-reasoner",
+      "name": "DeepSeek Reasoner",
+      "price_history": [
+        {
+          "input": 0.55,
+          "output": 2.19,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    }
+  ]
+}

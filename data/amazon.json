@@ -1,0 +1,57 @@
+{
+  "vendor": "amazon",
+  "models": [
+    {
+      "id": "amazon-nova-micro",
+      "name": "Amazon Nova Micro",
+      "price_history": [
+        {
+          "input": 0.035,
+          "output": 0.14,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "amazon-nova-lite",
+      "name": "Amazon Nova Lite",
+      "price_history": [
+        {
+          "input": 0.06,
+          "output": 0.24,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "amazon-nova-pro",
+      "name": "Amazon Nova Pro",
+      "price_history": [
+        {
+          "input": 0.8,
+          "output": 3.2,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "amazon-nova-premier",
+      "name": "Amazon Nova Premier",
+      "price_history": [
+        {
+          "input": 2.5,
+          "output": 12.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    }
+  ]
+}

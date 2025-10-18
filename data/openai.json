@@ -1,0 +1,291 @@
+{
+  "vendor": "openai",
+  "models": [
+    {
+      "id": "gpt-4.5",
+      "name": "GPT-4.5",
+      "price_history": [
+        {
+          "input": 75,
+          "output": 150,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 37.5
+        }
+      ]
+    },
+    {
+      "id": "gpt-4o",
+      "name": "GPT-4o",
+      "price_history": [
+        {
+          "input": 2.5,
+          "output": 10,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 1.25
+        }
+      ]
+    },
+    {
+      "id": "gpt-4o-mini",
+      "name": "GPT-4o Mini",
+      "price_history": [
+        {
+          "input": 0.15,
+          "output": 0.6,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.075
+        }
+      ]
+    },
+    {
+      "id": "chatgpt-4o-latest",
+      "name": "ChatGPT 4o Latest",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "o1-preview",
+      "name": "o1 and o1-preview",
+      "price_history": [
+        {
+          "input": 15,
+          "output": 60,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 7.5
+        }
+      ]
+    },
+    {
+      "id": "o1-pro",
+      "name": "o1 Pro",
+      "price_history": [
+        {
+          "input": 150,
+          "output": 600,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "o1-mini",
+      "name": "o1-mini",
+      "price_history": [
+        {
+          "input": 1.1,
+          "output": 4.4,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.55
+        }
+      ]
+    },
+    {
+      "id": "o3-mini",
+      "name": "o3-mini",
+      "price_history": [
+        {
+          "input": 1.1,
+          "output": 4.4,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.55
+        }
+      ]
+    },
+    {
+      "id": "gpt-4.1",
+      "name": "GPT-4.1",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 8,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.5
+        }
+      ]
+    },
+    {
+      "id": "gpt-4.1-mini",
+      "name": "GPT-4.1 Mini",
+      "price_history": [
+        {
+          "input": 0.4,
+          "output": 1.6,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.1
+        }
+      ]
+    },
+    {
+      "id": "gpt-4.1-nano",
+      "name": "GPT-4.1 Nano",
+      "price_history": [
+        {
+          "input": 0.1,
+          "output": 0.4,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.025
+        }
+      ]
+    },
+    {
+      "id": "o3",
+      "name": "o3",
+      "price_history": [
+        {
+          "input": 10,
+          "output": 40,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.5
+        }
+      ]
+    },
+    {
+      "id": "o4-mini",
+      "name": "o4-mini",
+      "price_history": [
+        {
+          "input": 1.1,
+          "output": 4.4,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.275
+        }
+      ]
+    },
+    {
+      "id": "gpt-5-nano",
+      "name": "GPT-5 Nano",
+      "price_history": [
+        {
+          "input": 0.05,
+          "output": 0.4,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.005
+        }
+      ]
+    },
+    {
+      "id": "gpt-5-mini",
+      "name": "GPT-5 Mini",
+      "price_history": [
+        {
+          "input": 0.25,
+          "output": 2,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.025
+        }
+      ]
+    },
+    {
+      "id": "gpt-5",
+      "name": "GPT-5",
+      "price_history": [
+        {
+          "input": 1.25,
+          "output": 10,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.125
+        }
+      ]
+    },
+    {
+      "id": "gpt-image-1",
+      "name": "gpt-image-1 (image gen)",
+      "price_history": [
+        {
+          "input": 10,
+          "output": 40,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 1.25
+        }
+      ]
+    },
+    {
+      "id": "gpt-image-1-mini",
+      "name": "gpt-image-1-mini (image gen)",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 8,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.2
+        }
+      ]
+    },
+    {
+      "id": "gpt-5-pro",
+      "name": "GPT-5 Pro",
+      "price_history": [
+        {
+          "input": 15,
+          "output": 120,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "o3-pro",
+      "name": "o3 Pro",
+      "price_history": [
+        {
+          "input": 20,
+          "output": 80,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "o4-mini-deep-research",
+      "name": "o4-mini Deep Research",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 8,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "o3-deep-research",
+      "name": "o3 Deep Research",
+      "price_history": [
+        {
+          "input": 10,
+          "output": 40,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    }
+  ]
+}

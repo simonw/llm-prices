@@ -1,0 +1,187 @@
+{
+  "vendor": "mistral",
+  "models": [
+    {
+      "id": "pixtral-12b",
+      "name": "Pixtral 12B",
+      "price_history": [
+        {
+          "input": 0.15,
+          "output": 0.15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "mistral-small-latest",
+      "name": "Mistral Small 3.1",
+      "price_history": [
+        {
+          "input": 0.1,
+          "output": 0.3,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "mistral-medium-2505",
+      "name": "Mistral Medium 3",
+      "price_history": [
+        {
+          "input": 0.4,
+          "output": 2,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "mistral-nemo",
+      "name": "Mistral NeMo",
+      "price_history": [
+        {
+          "input": 0.15,
+          "output": 0.15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "open-mistral-7b",
+      "name": "Mistral 7B",
+      "price_history": [
+        {
+          "input": 0.25,
+          "output": 0.25,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "open-mixtral-8x7b",
+      "name": "Mixtral 8x7B",
+      "price_history": [
+        {
+          "input": 0.7,
+          "output": 0.7,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "open-mixtral-8x22b",
+      "name": "Mixtral 8x22B",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 6,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "mistral-large-latest",
+      "name": "Mistral Large 24.11",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 6,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "pixtral-large-latest",
+      "name": "Pixtral Large",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 6,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "mistral-saba-latest",
+      "name": "Mistral Saba",
+      "price_history": [
+        {
+          "input": 0.2,
+          "output": 0.6,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "codestral-latest",
+      "name": "Codestral",
+      "price_history": [
+        {
+          "input": 0.3,
+          "output": 0.9,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "ministral-8b-latest",
+      "name": "Ministral 8B 24.10",
+      "price_history": [
+        {
+          "input": 0.1,
+          "output": 0.1,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "ministral-3b-latest",
+      "name": "Ministral 3B 24.10",
+      "price_history": [
+        {
+          "input": 0.04,
+          "output": 0.04,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "magistral-medium-latest",
+      "name": "Magistral Medium",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    }
+  ]
+}

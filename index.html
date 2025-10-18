@@ -147,6 +147,35 @@
             text-align: center;
             font-style: italic;
         }
+        .search-filter {
+            margin-bottom: 15px;
+        }
+        #modelSearch {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        #modelSearch:focus {
+            outline: 2px solid #0066cc;
+            border-color: #0066cc;
+        }
+        #compareToggle {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        #compareToggle.hidden {
+            display: none;
+        }
+        #clearSelectionBtn:hover {
+            background-color: #e0e0e0;
+            border-color: #999;
+        }
+        #clearSelectionBtn:active {
+            background-color: #d0d0d0;
+        }
     </style>
     <script defer data-domain="llm-prices.com" src="https://plausible.io/js/script.js"></script>
 </head>
@@ -156,18 +185,26 @@
             <div class="calculator">
                 <h1>LLM pricing calculator</h1>
                 <div class="input-group">
-                    <label for="inputTokens">Number of input tokens (aka prompt tokens):</label>
+                    <label for="inputTokens">Number of input tokens<br><span style="font-size: 0.85em; color: #666;">(aka prompt tokens)</span></label>
                     <input type="number" id="inputTokens" min="0">
                 </div>
-                <div class="input-group">
-                    <label for="outputTokens">Number of output tokens (aka completion tokens):</label>
-                    <input type="number" id="outputTokens" min="0">
+                <div class="input-group" id="cachedInputGroup">
+                    <label for="cachedInputTokens">Number of cached input tokens</label>
+                    <input type="number" id="cachedInputTokens" min="0">
                 </div>
                 <div class="input-group">
+                    <label for="outputTokens">Number of output tokens<br><span style="font-size: 0.85em; color: #666;">(aka completion tokens)</span></label>
+                    <input type="number" id="outputTokens" min="0">
+                </div>
+                <div class="input-group cost-input-group">
                     <label for="inputCost">Cost per million input tokens ($):</label>
                     <input type="number" id="inputCost" min="0" step="0.000001">
                 </div>
-                <div class="input-group">
+                <div class="input-group cost-input-group">
+                    <label for="cachedInputCost">Cost per million cached input tokens ($):</label>
+                    <input type="number" id="cachedInputCost" min="0" step="0.000001">
+                </div>
+                <div class="input-group cost-input-group">
                     <label for="outputCost">Cost per million output tokens ($):</label>
                     <input type="number" id="outputCost" min="0" step="0.000001">
                 </div>
@@ -175,10 +212,26 @@
                     <p>Total cost: $<span id="costDollars">0.000000</span></p>
                     <p>Total cost: <span id="costCents">0</span> cents</p>
                 </div>
+                <div id="multiModelResults" style="display: none; margin-top: 20px;">
+                    <!-- Multi-model comparison results will appear here -->
+                </div>
+                <div style="margin-top: 20px; padding: 10px; background-color: #f9f9f9; border-radius: 4px; font-size: 12px; color: #666; font-style: italic;">
+                    Note: Different models use different tokenizers, so direct token-based price comparisons may not be entirely accurate.
+                </div>
             </div>
 
             <div class="presets">
                 <h2>Model prices (per million tokens)</h2>
+                <div class="search-filter">
+                    <input type="search" id="modelSearch" placeholder="Search models..." aria-label="Search models">
+                </div>
+                <div id="compareToggle" class="hidden" style="margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                        <input type="checkbox" id="showOnlySelectedCheckbox">
+                        <span>Show just selected</span>
+                    </label>
+                    <button type="button" id="clearSelectionBtn" style="padding: 6px 12px; background-color: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 14px; transition: background-color 0.2s;">Clear selection</button>
+                </div>
                 <div id="presetTable">
                     <table class="preset-table">
                         <thead>
@@ -192,6 +245,7 @@
                                 <th aria-sort="ascending"> <!-- Default sort visually, JS will confirm -->
                                     <button type="button" id="sortByInput">
                                         Input cost
+                                        <span style="font-size: 0.85em; color: #666; font-weight: normal;">(Cached)</span>
                                         <span class="sort-icon" aria-hidden="true">↑</span>
                                     </button>
                                 </th>
@@ -201,6 +255,7 @@
                                         <span class="sort-icon" aria-hidden="true"></span>
                                     </button>
                                 </th>
+                                <th>Compare</th>
                             </tr>
                         </thead>
                         <tbody id="presetTableBody">
@@ -211,95 +266,33 @@
             </div>
         </div>
 
-        <div class="disclaimer">Prices may have changed since this tool was last updated.</div>
+        <div class="disclaimer">
+            Prices last updated: <span id="lastUpdated">Loading...</span>
+            <br>
+            <a href="https://github.com/simonw/llm-prices" target="_blank" rel="noopener noreferrer">View source on GitHub</a>
+        </div>
     </div>
 
     <script>
-        // Prices are $ per 1M tokens
-        const presets = {
-            'gemini-2.5-pro': { name: 'Gemini 2.5 Pro ≤200k', input: 1.25, output: 10.00 },
-            'gemini-2.5-pro--200k': { name: 'Gemini 2.5 Pro >200k', input: 2.50, output: 15.00 },
-            'gemini-2.5-flash': { name: 'Gemini 2.5 Flash', input: 0.30, output: 2.50 },
-            'gemini-2.5-flash-preview': { name: 'Gemini 2.5 Flash Preview', input: 0.15, output: 0.60 },
-            'gemini-2.5-flash-preview-thinking': { name: 'Gemini 2.5 Flash Preview Thinking', input: 0.15, output: 3.50 },
-            'gemini-2.5-flash-lite-preview': { name: 'Gemini 2.5 Flash-Lite Preview', input: 0.10, output: 0.40 },
-            'gemini-2.0-flash-lite': { name: 'Gemini 2.0 Flash Lite', input: 0.075, output: 0.30 },
-            'gemini-2.0-flash': { name: 'Gemini 2.0 Flash', input: 0.10, output: 0.40 },
-            'gemini-1.5-flash': { name: 'Gemini 1.5 Flash ≤128k', input: 0.075, output: 0.30 },
-            'gemini-1.5-flash-128k': { name: 'Gemini 1.5 Flash >128k', input: 0.15, output: 0.60 },
-            'gemini-1.5-flash-8b': { name: 'Gemini 1.5 Flash-8B ≤128k', input: 0.0375, output: 0.15 },
-            'gemini-1.5-flash-8b-128k': { name: 'Gemini 1.5 Flash-8B >128k', input: 0.075, output: 0.30 },
-            'gemini-1.5-pro': { name: 'Gemini 1.5 Pro ≤128k', input: 1.25, output: 5.00 },
-            'gemini-1.5-pro-128k': { name: 'Gemini 1.5 Pro >128k', input: 2.50, output: 10.00 },
-            'claude-opus-4': { name: 'Claude Opus 4', input: 15.00, output: 75.00 },
-            'claude-sonnet-4': { name: 'Claude Sonnet 4', input: 3.00, output: 15.00 },
-            'claude-3.7-sonnet': { name: 'Claude 3.7 Sonnet', input: 3.00, output: 15.00 },
-            'claude-3.5-sonnet': { name: 'Claude 3.5 Sonnet', input: 3.00, output: 15.00 },
-            'claude-3-opus': { name: 'Claude 3 Opus', input: 15.00, output: 75.00 },
-            'claude-3-haiku': { name: 'Claude 3 Haiku', input: 0.25, output: 1.25 },
-            'claude-3.5-haiku': { name: 'Claude 3.5 Haiku', input: 0.80, output: 4.00 },
-            'gpt-4.5': { name: 'GPT-4.5', input: 75.00, output: 150.00 },
-            'gpt-4o': { name: 'GPT-4o', input: 2.50, output: 10.00 },
-            'gpt-4o-mini': { name: 'GPT-4o Mini', input: 0.150, output: 0.600 },
-            'chatgpt-4o-latest': { name: 'ChatGPT 4o Latest', input: 5.00, output: 15.00 },
-            'o1-preview': { name: 'o1 and o1-preview', input: 15.00, output: 60.00 },
-            'o1-pro': { name: 'o1 Pro', input: 150.00, output: 600.00 },
-            'o1-mini': { name: 'o1-mini', input: 1.10, output: 4.40 },
-            'o3-mini': { name: 'o3-mini', input: 1.10, output: 4.40 },
-            'amazon-nova-micro': { name: 'Amazon Nova Micro', input: 0.035, output: 0.14 },
-            'amazon-nova-lite': { name: 'Amazon Nova Lite', input: 0.06, output: 0.24 },
-            'amazon-nova-pro': { name: 'Amazon Nova Pro', input: 0.8, output: 3.2 },
-            'amazon-nova-premier': { name: 'Amazon Nova Premier', input: 2.5, output: 12.5 },
-            'deepseek-chat': { 
-                name: 'DeepSeek Chat',
-                getPrice: () => {
-                    const cutoffDate = new Date('2025-02-08T16:00:00Z');
-                    const currentDate = new Date();
-                    
-                    if (currentDate < cutoffDate) {
-                        return { input: 0.14, output: 0.28 };
-                    } else {
-                        return { input: 0.27, output: 1.10 };
-                    }
-                }
-            },
-            'deepseek-reasoner': { name: 'DeepSeek Reasoner', input: 0.55, output: 2.19 },
-            'pixtral-12b': { name: 'Pixtral 12B', input: 0.15, output: 0.15 },
-            'mistral-small-latest': { name: 'Mistral Small 3.1', input: 0.1, output: 0.3 },
-            'mistral-medium-2505': { name: 'Mistral Medium 3', input: 0.4, output: 2 },
-            'mistral-nemo': { name: 'Mistral NeMo', input: 0.15, output: 0.15 },
-            'open-mistral-7b': { name: 'Mistral 7B', input: 0.25, output: 0.25 },
-            'open-mixtral-8x7b': { name: 'Mixtral 8x7B', input: 0.7, output: 0.7 },
-            'open-mixtral-8x22b': { name: 'Mixtral 8x22B', input: 2, output: 6 },
-            'mistral-large-latest': { name: 'Mistral Large 24.11', input: 2, output: 6 },
-            'magistral-medium-latest': { name: 'Magistral Medium', input: 2, output: 5 },
-            'pixtral-large-latest': { name: 'Pixtral Large', input: 2, output: 6 },
-            'mistral-saba-latest': { name: 'Mistral Saba', input: 0.2, output: 0.6 },
-            'codestral-latest': { name: 'Codestral', input: 0.3, output: 0.9 },
-            'ministral-8b-latest': { name: 'Ministral 8B 24.10', input: 0.1, output: 0.1 },
-            'ministral-3b-latest': { name: 'Ministral 3B 24.10', input: 0.04, output: 0.04 },
-            'grok-3-beta': { name: 'Grok 3 Beta', input: 3.00, output: 15.00 },
-            'grok-3-mini-beta': { name: 'Grok 3 Mini Beta', input: 0.30, output: 0.50 },
-            'gpt-4.1': { name: 'GPT 4.1', input: 2.00, output: 8.00 },
-            'gpt-4.1-mini': { name: 'GPT 4.1 Mini', input: 0.40, output: 1.60 },
-            'gpt-4.1-nano': { name: 'GPT 4.1 Nano', input: 0.10, output: 0.40 },
-            'o3': { name: 'o3', input: 2, output: 8 },
-            'o3-pro': { name: 'o3 Pro', input: 20, output: 80 },
-            'o4-mini': { name: 'o4-mini', input: 1.1, output: 4.4 },
-            'gpt-image-1': { name: 'gpt-image-1 (image gen)', input: 10, output: 40 },
-            'o4-mini-deep-research': { name: 'o4-mini Deep Research', input: 2, output: 8 },
-            'o3-deep-research': { name: 'o3 Deep Research', input: 10, output: 40 },
-        };
+        // Prices are $ per 1M tokens - loaded from models.json
+        let presets = {};
 
         // Global state variables for sorting
         let currentSortColumn = 'input'; // Default sort column: 'name', 'input', or 'output'
         let currentSortDirection = 'ascending'; // 'ascending' or 'descending'
+        let currentSearchTerm = ''; // Current search filter
+
+        // Global state variables for comparison
+        let selectedModels = new Set(); // Set of selected model keys
+        let showOnlySelected = false; // Whether to show only selected models
 
         // Form field IDs
         const elIds = {
             inputTokens: 'inputTokens',
+            cachedInputTokens: 'cachedInputTokens',
             outputTokens: 'outputTokens',
             inputCost: 'inputCost',
+            cachedInputCost: 'cachedInputCost',
             outputCost: 'outputCost',
             costDollars: 'costDollars',
             costCents: 'costCents',
@@ -312,29 +305,41 @@
         // Hash parameter keys (short for brevity in URL)
         const HASH_KEYS = {
             inputTokens: 'it',
+            cachedInputTokens: 'cit',
             outputTokens: 'ot',
             inputCost: 'ic',
+            cachedInputCost: 'cic',
             outputCost: 'oc',
             sortBy: 'sb',
-            sortDir: 'sd'
+            sortDir: 'sd',
+            selected: 'sel'
         };
 
         function updateUrlHash() {
             const params = new URLSearchParams();
             const inputTokensVal = document.getElementById(elIds.inputTokens).value;
+            const cachedInputTokensVal = document.getElementById(elIds.cachedInputTokens).value;
             const outputTokensVal = document.getElementById(elIds.outputTokens).value;
             const inputCostVal = document.getElementById(elIds.inputCost).value;
+            const cachedInputCostVal = document.getElementById(elIds.cachedInputCost).value;
             const outputCostVal = document.getElementById(elIds.outputCost).value;
 
             if (inputTokensVal && parseFloat(inputTokensVal) !== 0) params.set(HASH_KEYS.inputTokens, inputTokensVal);
+            if (cachedInputTokensVal && parseFloat(cachedInputTokensVal) !== 0) params.set(HASH_KEYS.cachedInputTokens, cachedInputTokensVal);
             if (outputTokensVal && parseFloat(outputTokensVal) !== 0) params.set(HASH_KEYS.outputTokens, outputTokensVal);
             if (inputCostVal && parseFloat(inputCostVal) !== 0) params.set(HASH_KEYS.inputCost, inputCostVal);
+            if (cachedInputCostVal && parseFloat(cachedInputCostVal) !== 0) params.set(HASH_KEYS.cachedInputCost, cachedInputCostVal);
             if (outputCostVal && parseFloat(outputCostVal) !== 0) params.set(HASH_KEYS.outputCost, outputCostVal);
 
             // Only add sort params if not the default sort to keep URL cleaner for default state
             if (!(currentSortColumn === 'input' && currentSortDirection === 'ascending')) {
                  params.set(HASH_KEYS.sortBy, currentSortColumn);
                  params.set(HASH_KEYS.sortDir, currentSortDirection);
+            }
+
+            // Add selected models if any
+            if (selectedModels.size > 0) {
+                params.set(HASH_KEYS.selected, Array.from(selectedModels).join(','));
             }
 
             const hashString = params.toString();
@@ -345,16 +350,95 @@
             }
         }
 
+        function updateCalculatorMode() {
+            const costInputGroups = document.querySelectorAll('.cost-input-group');
+            const singleResultDiv = document.querySelector('.result');
+            const multiResultDiv = document.getElementById('multiModelResults');
+            const cachedInputGroup = document.getElementById('cachedInputGroup');
+
+            if (selectedModels.size > 0) {
+                // Comparison mode: hide cost inputs, show multi-model results
+                costInputGroups.forEach(group => group.style.display = 'none');
+                singleResultDiv.style.display = 'none';
+                multiResultDiv.style.display = 'block';
+
+                // Check if any selected model has cached pricing
+                const hasCachedPricing = Array.from(selectedModels).some(key => {
+                    const model = presets[key];
+                    return model && model.input_cached !== null && model.input_cached !== undefined;
+                });
+
+                // Show/hide cached input tokens field based on whether any model supports it
+                cachedInputGroup.style.display = hasCachedPricing ? 'block' : 'none';
+            } else {
+                // Normal mode: show cost inputs, show single result
+                costInputGroups.forEach(group => group.style.display = 'block');
+                singleResultDiv.style.display = 'block';
+                multiResultDiv.style.display = 'none';
+                cachedInputGroup.style.display = 'block'; // Always show in normal mode
+            }
+            calculateCost();
+        }
+
         function calculateCost() {
             const inputTokens = parseFloat(document.getElementById(elIds.inputTokens).value) || 0;
+            const cachedInputTokens = parseFloat(document.getElementById(elIds.cachedInputTokens).value) || 0;
             const outputTokens = parseFloat(document.getElementById(elIds.outputTokens).value) || 0;
-            const inputCost = parseFloat(document.getElementById(elIds.inputCost).value) || 0;
-            const outputCost = parseFloat(document.getElementById(elIds.outputCost).value) || 0;
 
-            const totalCost = (inputTokens * inputCost / 1000000) + (outputTokens * outputCost / 1000000);
-            
-            document.getElementById(elIds.costDollars).textContent = totalCost.toFixed(6);
-            document.getElementById(elIds.costCents).textContent = trimZeros((totalCost * 100).toFixed(4));
+            if (selectedModels.size > 0) {
+                // Multi-model comparison mode
+                const multiResultDiv = document.getElementById('multiModelResults');
+                let html = '<div style="padding: 15px; background-color: #e9f7ef; border-radius: 4px;">';
+
+                const sortedModels = Array.from(selectedModels).map(key => ({
+                    key: key,
+                    ...presets[key]
+                })).sort((a, b) => {
+                    const costA = (inputTokens * a.input / 1000000) +
+                                 (cachedInputTokens * (a.input_cached || a.input) / 1000000) +
+                                 (outputTokens * a.output / 1000000);
+                    const costB = (inputTokens * b.input / 1000000) +
+                                 (cachedInputTokens * (b.input_cached || b.input) / 1000000) +
+                                 (outputTokens * b.output / 1000000);
+                    return costA - costB;
+                });
+
+                sortedModels.forEach(model => {
+                    const inputCost = model.input;
+                    const cachedInputCost = model.input_cached || model.input;
+                    const outputCost = model.output;
+                    const totalCost = (inputTokens * inputCost / 1000000) +
+                                     (cachedInputTokens * cachedInputCost / 1000000) +
+                                     (outputTokens * outputCost / 1000000);
+
+                    html += `<div style="margin-bottom: 10px; padding: 10px; background-color: white; border-radius: 4px;">`;
+                    html += `<div style="font-weight: bold; margin-bottom: 5px;">${model.name}</div>`;
+                    html += `<div style="font-size: 12px; color: #666; margin-bottom: 5px;">`;
+                    html += `Input: ${formatPrice(inputCost)}/M`;
+                    if (model.input_cached) {
+                        html += ` (Cached: ${formatPrice(cachedInputCost)}/M)`;
+                    }
+                    html += ` | Output: ${formatPrice(outputCost)}/M`;
+                    html += `</div>`;
+                    html += `<div style="font-size: 18px; color: #2ecc71; font-weight: bold;">`;
+                    html += `$${totalCost.toFixed(6)} (${trimZeros((totalCost * 100).toFixed(4))} cents)`;
+                    html += `</div>`;
+                    html += `</div>`;
+                });
+
+                html += '</div>';
+                multiResultDiv.innerHTML = html;
+            } else {
+                // Single model mode
+                const inputCost = parseFloat(document.getElementById(elIds.inputCost).value) || 0;
+                const cachedInputCost = parseFloat(document.getElementById(elIds.cachedInputCost).value) || 0;
+                const outputCost = parseFloat(document.getElementById(elIds.outputCost).value) || 0;
+
+                const totalCost = (inputTokens * inputCost / 1000000) + (cachedInputTokens * cachedInputCost / 1000000) + (outputTokens * outputCost / 1000000);
+
+                document.getElementById(elIds.costDollars).textContent = totalCost.toFixed(6);
+                document.getElementById(elIds.costCents).textContent = trimZeros((totalCost * 100).toFixed(4));
+            }
             updateUrlHash();
         }
 
@@ -366,15 +450,9 @@
             const preset = presets[modelKey];
             if (!preset) return;
 
-            let prices;
-            if (preset.getPrice) {
-                prices = preset.getPrice();
-            } else {
-                prices = { input: preset.input, output: preset.output };
-            }
-            
-            document.getElementById(elIds.inputCost).value = prices.input;
-            document.getElementById(elIds.outputCost).value = prices.output;
+            document.getElementById(elIds.inputCost).value = preset.input;
+            document.getElementById(elIds.cachedInputCost).value = preset.input_cached || '';
+            document.getElementById(elIds.outputCost).value = preset.output;
             calculateCost(); // This will also call updateUrlHash
         }
 
@@ -385,20 +463,44 @@
             return `$${price.toFixed(2)}`;
         }
 
+        function matchesSearch(modelName, searchTerm) {
+            if (!searchTerm) return true;
+
+            // Split search term on spaces and create regex pattern
+            const terms = searchTerm.trim().split(/\s+/).filter(t => t.length > 0);
+            if (terms.length === 0) return true;
+
+            // Escape special regex characters in each term
+            const escapedTerms = terms.map(term =>
+                term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            );
+
+            // Create pattern: first-term.*next-term.*last-term
+            const pattern = escapedTerms.join('.*');
+            const regex = new RegExp(pattern, 'i'); // case-insensitive
+
+            return regex.test(modelName);
+        }
+
         function getSortedPresetList(sortCol, sortDir) {
             const presetList = [];
             for (const [key, preset] of Object.entries(presets)) {
-                let prices;
-                if (preset.getPrice) {
-                    prices = preset.getPrice();
-                } else {
-                    prices = { input: preset.input, output: preset.output };
+                // Apply search filter
+                if (!matchesSearch(preset.name, currentSearchTerm)) {
+                    continue;
                 }
+
+                // Apply "show only selected" filter
+                if (showOnlySelected && !selectedModels.has(key)) {
+                    continue;
+                }
+
                 presetList.push({
                     key: key,
                     name: preset.name,
-                    input: prices.input,
-                    output: prices.output
+                    input: preset.input,
+                    output: preset.output,
+                    input_cached: preset.input_cached
                 });
             }
 
@@ -428,24 +530,105 @@
         function renderTable(data) {
             const presetTableBody = document.getElementById(elIds.presetTableBody);
             presetTableBody.innerHTML = ''; // Clear existing rows
-            
+
             data.forEach(item => {
                 const row = document.createElement('tr');
+                // Format input cost with cached price if available
+                let inputCostDisplay = formatPrice(item.input);
+                if (item.input_cached !== null && item.input_cached !== undefined) {
+                    inputCostDisplay += ` <span style="font-size: 0.85em; color: #666;">(${formatPrice(item.input_cached)})</span>`;
+                }
                 // Note: onclick now calls window.setPreset because these are dynamically added
                 row.innerHTML = `
                     <td><button class="model-name-btn" onclick="window.setPreset('${item.key}')">${item.name}</button></td>
-                    <td>${formatPrice(item.input)}</td>
+                    <td>${inputCostDisplay}</td>
                     <td>${formatPrice(item.output)}</td>
+                    <td><input type="checkbox" class="compare-checkbox" data-model-key="${item.key}" ${selectedModels.has(item.key) ? 'checked' : ''}></td>
                 `;
                 presetTableBody.appendChild(row);
             });
+
+            // Add event listeners to checkboxes
+            const checkboxes = presetTableBody.querySelectorAll('.compare-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', handleCheckboxChange);
+            });
+
+            // Add click handlers to rows for toggling checkboxes
+            const rows = presetTableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                row.addEventListener('click', handleRowClick);
+                row.style.cursor = 'pointer';
+            });
         }
-        
+
+        function handleRowClick(event) {
+            // Don't toggle if clicking on the model name button or the checkbox itself
+            if (event.target.closest('.model-name-btn') || event.target.classList.contains('compare-checkbox')) {
+                return;
+            }
+
+            // Find the checkbox in this row
+            const checkbox = event.currentTarget.querySelector('.compare-checkbox');
+            if (checkbox) {
+                // Toggle the checkbox
+                checkbox.checked = !checkbox.checked;
+                // Trigger the change event
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        }
+
+        function handleCheckboxChange(event) {
+            const checkbox = event.target;
+            const modelKey = checkbox.dataset.modelKey;
+
+            if (checkbox.checked) {
+                selectedModels.add(modelKey);
+            } else {
+                selectedModels.delete(modelKey);
+            }
+
+            updateCompareToggleVisibility();
+            updateCalculatorMode();
+            updateUrlHash();
+        }
+
+        function updateCompareToggleVisibility() {
+            const compareToggle = document.getElementById('compareToggle');
+            if (selectedModels.size >= 1) {
+                compareToggle.classList.remove('hidden');
+            } else {
+                compareToggle.classList.add('hidden');
+                // If no models selected, turn off "show only selected" mode
+                if (showOnlySelected) {
+                    showOnlySelected = false;
+                    document.getElementById('showOnlySelectedCheckbox').checked = false;
+                    updateTableSortVisualsAndData();
+                }
+            }
+        }
+
+        function handleShowOnlySelectedChange(event) {
+            showOnlySelected = event.target.checked;
+
+            // Clear search filter if it has text
+            const searchInput = document.getElementById('modelSearch');
+            if (searchInput.value) {
+                searchInput.value = '';
+                currentSearchTerm = '';
+            }
+
+            updateTableSortVisualsAndData();
+        }
+
         function updateTableSortVisualsAndData() {
             const thElements = document.querySelectorAll('.preset-table th');
             thElements.forEach(th => {
                 th.setAttribute('aria-sort', 'none');
-                th.querySelector('.sort-icon').textContent = '';
+                const sortIcon = th.querySelector('.sort-icon');
+                if (sortIcon) {
+                    sortIcon.textContent = '';
+                }
             });
 
             let activeThButtonId;
@@ -485,13 +668,17 @@
             const params = new URLSearchParams(window.location.hash.substring(1));
 
             const inputTokensEl = document.getElementById(elIds.inputTokens);
+            const cachedInputTokensEl = document.getElementById(elIds.cachedInputTokens);
             const outputTokensEl = document.getElementById(elIds.outputTokens);
             const inputCostEl = document.getElementById(elIds.inputCost);
+            const cachedInputCostEl = document.getElementById(elIds.cachedInputCost);
             const outputCostEl = document.getElementById(elIds.outputCost);
 
             if (params.has(HASH_KEYS.inputTokens)) inputTokensEl.value = params.get(HASH_KEYS.inputTokens);
+            if (params.has(HASH_KEYS.cachedInputTokens)) cachedInputTokensEl.value = params.get(HASH_KEYS.cachedInputTokens);
             if (params.has(HASH_KEYS.outputTokens)) outputTokensEl.value = params.get(HASH_KEYS.outputTokens);
             if (params.has(HASH_KEYS.inputCost)) inputCostEl.value = params.get(HASH_KEYS.inputCost);
+            if (params.has(HASH_KEYS.cachedInputCost)) cachedInputCostEl.value = params.get(HASH_KEYS.cachedInputCost);
             if (params.has(HASH_KEYS.outputCost)) outputCostEl.value = params.get(HASH_KEYS.outputCost);
 
             const sortByFromHash = params.get(HASH_KEYS.sortBy);
@@ -501,7 +688,7 @@
             const validSortCols = ['name', 'input', 'output'];
             const validSortDirs = ['ascending', 'descending'];
 
-            if (sortByFromHash && validSortCols.includes(sortByFromHash) && 
+            if (sortByFromHash && validSortCols.includes(sortByFromHash) &&
                 sortDirFromHash && validSortDirs.includes(sortDirFromHash)) {
                 currentSortColumn = sortByFromHash;
                 currentSortDirection = sortDirFromHash;
@@ -511,6 +698,30 @@
                 currentSortDirection = 'ascending';
             }
             // If no sort params in hash, defaults currentSortColumn/Direction are used
+
+            // Restore selected models
+            if (params.has(HASH_KEYS.selected)) {
+                const selectedStr = params.get(HASH_KEYS.selected);
+                if (selectedStr) {
+                    selectedModels = new Set(selectedStr.split(',').filter(key => key.length > 0));
+                }
+            }
+        }
+
+        function handleSearchInput(event) {
+            currentSearchTerm = event.target.value;
+            updateTableSortVisualsAndData();
+        }
+
+        function handleSearchKeydown(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                // Find the first model button in the table and click it
+                const firstModelButton = document.querySelector('#presetTableBody .model-name-btn');
+                if (firstModelButton) {
+                    firstModelButton.click();
+                }
+            }
         }
 
         function createPresetsTableStructure() {
@@ -518,10 +729,34 @@
             document.getElementById(elIds.sortByName).addEventListener('click', () => sortTable('name'));
             document.getElementById(elIds.sortByInput).addEventListener('click', () => sortTable('input'));
             document.getElementById(elIds.sortByOutput).addEventListener('click', () => sortTable('output'));
-            
+
+            // Event listeners for search input
+            const searchInput = document.getElementById('modelSearch');
+            searchInput.addEventListener('input', handleSearchInput);
+            searchInput.addEventListener('keydown', handleSearchKeydown);
+
+            // Event listener for "show only selected" checkbox
+            const showOnlySelectedCheckbox = document.getElementById('showOnlySelectedCheckbox');
+            showOnlySelectedCheckbox.addEventListener('change', handleShowOnlySelectedChange);
+
+            // Event listener for "clear selection" button
+            const clearSelectionBtn = document.getElementById('clearSelectionBtn');
+            clearSelectionBtn.addEventListener('click', handleClearSelection);
+
             // Initial render based on currentSortColumn and currentSortDirection
             // (which might have been updated by applyStateFromHash)
             updateTableSortVisualsAndData();
+            updateCompareToggleVisibility();
+        }
+
+        function handleClearSelection() {
+            selectedModels.clear();
+            showOnlySelected = false;
+            document.getElementById('showOnlySelectedCheckbox').checked = false;
+            updateTableSortVisualsAndData();
+            updateCompareToggleVisibility();
+            updateCalculatorMode();
+            updateUrlHash();
         }
 
         function handlePaste(event) {
@@ -543,21 +778,53 @@
             }
         }
 
+        // Load models from current.json
+        async function loadModels() {
+            try {
+                const response = await fetch('current-v1.json');
+                const data = await response.json();
+
+                // Convert prices array to object with id as the key
+                presets = {};
+                data.prices.forEach(model => {
+                    presets[model.id] = {
+                        name: model.name,
+                        input: model.input,
+                        output: model.output,
+                        input_cached: model.input_cached
+                    };
+                });
+
+                // Update the last updated date in the footer
+                if (data.updated_at) {
+                    document.getElementById('lastUpdated').textContent = data.updated_at;
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Error loading models:', error);
+                document.getElementById('lastUpdated').textContent = 'Unknown';
+                return false;
+            }
+        }
+
         // Make setPreset globally accessible for dynamically created buttons
         window.setPreset = setPreset;
 
         // Initialize on DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadModels();        // 0. Load models from JSON first
             applyStateFromHash();      // 1. Apply state from URL hash first (updates globals)
             createPresetsTableStructure(); // 2. Setup table structure & initial render using (potentially updated) globals
-            calculateCost();           // 3. Initial calculation and URL hash update based on current state
+            updateCalculatorMode();    // 3. Set calculator mode based on selections
+            calculateCost();           // 4. Initial calculation and URL hash update based on current state
 
             // Add event listeners to form inputs
-            const formInputs = [elIds.inputTokens, elIds.outputTokens, elIds.inputCost, elIds.outputCost];
+            const formInputs = [elIds.inputTokens, elIds.cachedInputTokens, elIds.outputTokens, elIds.inputCost, elIds.cachedInputCost, elIds.outputCost];
             formInputs.forEach(id => {
                 document.getElementById(id).addEventListener('input', calculateCost);
                 // Add paste listener only to token inputs as per original logic
-                if (id === elIds.inputTokens || id === elIds.outputTokens) {
+                if (id === elIds.inputTokens || id === elIds.cachedInputTokens || id === elIds.outputTokens) {
                      document.getElementById(id).addEventListener('paste', handlePaste);
                 } else {
                      document.getElementById(id).addEventListener('paste', (e) => {
