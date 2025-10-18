@@ -563,8 +563,8 @@
         }
 
         function handleRowClick(event) {
-            // Don't toggle if clicking on the model name button
-            if (event.target.closest('.model-name-btn')) {
+            // Don't toggle if clicking on the model name button or the checkbox itself
+            if (event.target.closest('.model-name-btn') || event.target.classList.contains('compare-checkbox')) {
                 return;
             }
 
