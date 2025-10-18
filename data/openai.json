@@ -270,7 +270,7 @@
           "output": 8,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.5
         }
       ]
     },
@@ -283,7 +283,7 @@
           "output": 40,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 2.5
         }
       ]
     }
