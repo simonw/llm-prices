@@ -1,0 +1,18 @@
+{
+  "vendor": "minimax",
+  "models": [
+    {
+      "id": "minimax-m2",
+      "name": "MiniMax M2",
+      "price_history": [
+        {
+          "input": 0.3,
+          "output": 1.2,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    }
+  ]
+}
