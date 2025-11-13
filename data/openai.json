@@ -286,6 +286,45 @@
           "input_cached": 2.5
         }
       ]
+    },
+    {
+      "id": "gpt-5.1-codex-mini",
+      "name": "GPT-5.1 Codex mini",
+      "price_history": [
+        {
+          "input": 0.25,
+          "output": 2.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.025
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.1-codex",
+      "name": "GPT-5.1 Codex",
+      "price_history": [
+        {
+          "input": 1.25,
+          "output": 10.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.125
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.1",
+      "name": "GPT-5.1",
+      "price_history": [
+        {
+          "input": 1.25,
+          "output": 10.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.125
+        }
+      ]
     }
   ]
 }
