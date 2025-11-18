@@ -221,6 +221,32 @@
           "input_cached": null
         }
       ]
+    },
+    {
+      "id": "gemini-3-pro-preview",
+      "name": "Gemini 3 Pro ≤200k",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 12,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "gemini-3-pro-preview-200k",
+      "name": "Gemini 3 Pro >200k",
+      "price_history": [
+        {
+          "input": 4,
+          "output": 18,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
     }
   ]
 }
