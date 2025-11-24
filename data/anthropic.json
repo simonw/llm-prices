@@ -107,11 +107,37 @@
     },
     {
       "id": "claude-opus-4",
-      "name": "Claude Opus 4 and 4.1",
+      "name": "Claude Opus 4",
       "price_history": [
         {
           "input": 15,
           "output": 75,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "claude-opus-4-1",
+      "name": "Claude Opus 4.1",
+      "price_history": [
+        {
+          "input": 15,
+          "output": 75,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "claude-4.5-opus",
+      "name": "Claude 4.5 Opus",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 25,
           "from_date": null,
           "to_date": null,
           "input_cached": null
