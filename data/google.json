@@ -136,24 +136,11 @@
       "name": "Gemini 2.5 Flash",
       "price_history": [
         {
-          "input": 0.15,
-          "output": 0.6,
+          "input": 0.3,
+          "output": 2.5,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
-        }
-      ]
-    },
-    {
-      "id": "gemini-2.5-flash-thinking",
-      "name": "Gemini 2.5 Flash Thinking",
-      "price_history": [
-        {
-          "input": 0.15,
-          "output": 3.5,
-          "from_date": null,
-          "to_date": null,
-          "input_cached": null
+          "input_cached": 0.03
         }
       ]
     },
@@ -166,33 +153,20 @@
           "output": 0.4,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.01
         }
       ]
     },
     {
-      "id": "gemini-2.5-flash-preview",
-      "name": "Gemini 2.5 Flash Preview",
+      "id": "gemini-2.5-flash-preview-09-2025",
+      "name": "Gemini 2.5 Flash Preview (09-2025)",
       "price_history": [
         {
-          "input": 0.15,
-          "output": 0.6,
+          "input": 0.3,
+          "output": 2.5,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
-        }
-      ]
-    },
-    {
-      "id": "gemini-2.5-flash-preview-thinking",
-      "name": "Gemini 2.5 Flash Preview Thinking",
-      "price_history": [
-        {
-          "input": 0.15,
-          "output": 3.5,
-          "from_date": null,
-          "to_date": null,
-          "input_cached": null
+          "input_cached": 0.03
         }
       ]
     },
@@ -205,12 +179,12 @@
           "output": 10,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.125
         }
       ]
     },
     {
-      "id": "gemini-2.5-pro--200k",
+      "id": "gemini-2.5-pro-200k",
       "name": "Gemini 2.5 Pro >200k",
       "price_history": [
         {
@@ -218,7 +192,7 @@
           "output": 15,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.25
         }
       ]
     },
