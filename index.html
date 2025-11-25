@@ -312,7 +312,8 @@
             outputCost: 'oc',
             sortBy: 'sb',
             sortDir: 'sd',
-            selected: 'sel'
+            selected: 'sel',
+            search: 'q'
         };
 
         function updateUrlHash() {
@@ -340,6 +341,11 @@
             // Add selected models if any
             if (selectedModels.size > 0) {
                 params.set(HASH_KEYS.selected, Array.from(selectedModels).join(','));
+            }
+
+            // Add search term if present
+            if (currentSearchTerm) {
+                params.set(HASH_KEYS.search, currentSearchTerm);
             }
 
             const hashString = params.toString();
@@ -706,11 +712,18 @@
                     selectedModels = new Set(selectedStr.split(',').filter(key => key.length > 0));
                 }
             }
+
+            // Restore search term
+            if (params.has(HASH_KEYS.search)) {
+                currentSearchTerm = params.get(HASH_KEYS.search);
+                document.getElementById('modelSearch').value = currentSearchTerm;
+            }
         }
 
         function handleSearchInput(event) {
             currentSearchTerm = event.target.value;
             updateTableSortVisualsAndData();
+            updateUrlHash();
         }
 
         function handleSearchKeydown(event) {
