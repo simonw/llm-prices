@@ -403,6 +403,23 @@
                     return costA - costB;
                 });
 
+                // Find cheapest input and output prices for multiplier display
+                let minInputPrice = Infinity;
+                let minOutputPrice = Infinity;
+                let minInputModel = null;
+                let minOutputModel = null;
+
+                sortedModels.forEach(model => {
+                    if (model.input < minInputPrice) {
+                        minInputPrice = model.input;
+                        minInputModel = model;
+                    }
+                    if (model.output < minOutputPrice) {
+                        minOutputPrice = model.output;
+                        minOutputModel = model;
+                    }
+                });
+
                 sortedModels.forEach(model => {
                     const inputCost = model.input;
                     const cachedInputCost = model.input_cached || model.input;
@@ -420,6 +437,28 @@
                     }
                     html += ` | Output: ${formatPrice(outputCost)}/M`;
                     html += `</div>`;
+
+                    // Show price multipliers when 2+ models selected
+                    if (selectedModels.size >= 2 && (inputCost > minInputPrice || outputCost > minOutputPrice)) {
+                        const inputMultiplier = inputCost / minInputPrice;
+                        const outputMultiplier = outputCost / minOutputPrice;
+
+                        let multiplierParts = [];
+                        if (inputCost > minInputPrice) {
+                            multiplierParts.push(`${inputMultiplier.toFixed(2)}x input vs ${minInputModel.name}`);
+                        }
+                        if (outputCost > minOutputPrice) {
+                            const outputRef = minOutputModel.key === minInputModel.key ? '' : ` vs ${minOutputModel.name}`;
+                            multiplierParts.push(`${outputMultiplier.toFixed(2)}x output${outputRef}`);
+                        }
+
+                        if (multiplierParts.length > 0) {
+                            html += `<div style="font-size: 11px; color: #999; margin-bottom: 5px; font-style: italic;">`;
+                            html += multiplierParts.join(', ');
+                            html += `</div>`;
+                        }
+                    }
+
                     html += `<div style="font-size: 18px; color: #2ecc71; font-weight: bold;">`;
                     html += `$${totalCost.toFixed(6)} (${trimZeros((totalCost * 100).toFixed(4))} cents)`;
                     html += `</div>`;
