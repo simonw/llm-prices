@@ -445,11 +445,11 @@
 
                         let multiplierParts = [];
                         if (inputCost > minInputPrice) {
-                            multiplierParts.push(`${inputMultiplier.toFixed(2)}x input vs ${minInputModel.name}`);
+                            multiplierParts.push(`${trimZeros(inputMultiplier.toFixed(2))}x input vs ${minInputModel.name}`);
                         }
                         if (outputCost > minOutputPrice) {
                             const outputRef = minOutputModel.key === minInputModel.key ? '' : ` vs ${minOutputModel.name}`;
-                            multiplierParts.push(`${outputMultiplier.toFixed(2)}x output${outputRef}`);
+                            multiplierParts.push(`${trimZeros(outputMultiplier.toFixed(2))}x output${outputRef}`);
                         }
 
                         if (multiplierParts.length > 0) {
