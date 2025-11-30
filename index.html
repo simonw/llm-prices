@@ -209,8 +209,7 @@
                     <input type="number" id="outputCost" min="0" step="0.000001">
                 </div>
                 <div class="result">
-                    <p>Total cost: $<span id="costDollars">0.000000</span></p>
-                    <p>Total cost: <span id="costCents">0</span> cents</p>
+                    <p>Total cost: <span id="costFormatted">$0 (0 cents)</span></p>
                 </div>
                 <div id="multiModelResults" style="display: none; margin-top: 20px;">
                     <!-- Multi-model comparison results will appear here -->
@@ -294,8 +293,7 @@
             inputCost: 'inputCost',
             cachedInputCost: 'cachedInputCost',
             outputCost: 'outputCost',
-            costDollars: 'costDollars',
-            costCents: 'costCents',
+            costFormatted: 'costFormatted',
             presetTableBody: 'presetTableBody',
             sortByName: 'sortByName',
             sortByInput: 'sortByInput',
@@ -460,7 +458,7 @@
                     }
 
                     html += `<div style="font-size: 18px; color: #2ecc71; font-weight: bold;">`;
-                    html += `$${totalCost.toFixed(6)} (${trimZeros((totalCost * 100).toFixed(4))} cents)`;
+                    html += formatCost(totalCost);
                     html += `</div>`;
                     html += `</div>`;
                 });
@@ -475,14 +473,23 @@
 
                 const totalCost = (inputTokens * inputCost / 1000000) + (cachedInputTokens * cachedInputCost / 1000000) + (outputTokens * outputCost / 1000000);
 
-                document.getElementById(elIds.costDollars).textContent = totalCost.toFixed(6);
-                document.getElementById(elIds.costCents).textContent = trimZeros((totalCost * 100).toFixed(4));
+                document.getElementById(elIds.costFormatted).textContent = formatCost(totalCost);
             }
             updateUrlHash();
         }
 
         function trimZeros(numStr) {
             return numStr.replace(/\.?0+$/, '');
+        }
+
+        function formatCost(totalCost) {
+            const dollars = trimZeros(totalCost.toFixed(6));
+            if (totalCost >= 1) {
+                return `$${dollars}`;
+            } else {
+                const cents = trimZeros((totalCost * 100).toFixed(4));
+                return `$${dollars} (${cents} cents)`;
+            }
         }
 
         function setPreset(modelKey) {
