@@ -2,6 +2,19 @@
   "vendor": "openai",
   "models": [
     {
+      "id": "text-davinci-003",
+      "name": "GPT-3 Text Davinci 003",
+      "price_history": [
+        {
+          "input": 20,
+          "output": 20,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
       "id": "gpt-4.5",
       "name": "GPT-4.5",
       "price_history": [
