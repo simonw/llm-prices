@@ -209,7 +209,7 @@
                     <input type="number" id="outputCost" min="0" step="0.000001">
                 </div>
                 <div class="result">
-                    <p>Total cost: <span id="costFormatted">$0 (0 cents)</span></p>
+                    <p>Total cost: <span id="costFormatted">-</span></p>
                 </div>
                 <div id="multiModelResults" style="display: none; margin-top: 20px;">
                     <!-- Multi-model comparison results will appear here -->
@@ -457,9 +457,12 @@
                         }
                     }
 
-                    html += `<div style="font-size: 18px; color: #2ecc71; font-weight: bold;">`;
-                    html += formatCost(totalCost);
-                    html += `</div>`;
+                    // Only show cost if tokens have been entered
+                    if (inputTokens > 0 || cachedInputTokens > 0 || outputTokens > 0) {
+                        html += `<div style="font-size: 18px; color: #2ecc71; font-weight: bold;">`;
+                        html += formatCost(totalCost);
+                        html += `</div>`;
+                    }
                     html += `</div>`;
                 });
 
@@ -473,7 +476,14 @@
 
                 const totalCost = (inputTokens * inputCost / 1000000) + (cachedInputTokens * cachedInputCost / 1000000) + (outputTokens * outputCost / 1000000);
 
-                document.getElementById(elIds.costFormatted).textContent = formatCost(totalCost);
+                // Only show formatted cost if tokens or costs have been entered
+                const hasTokens = inputTokens > 0 || cachedInputTokens > 0 || outputTokens > 0;
+                const hasCosts = inputCost > 0 || cachedInputCost > 0 || outputCost > 0;
+                if (hasTokens && hasCosts) {
+                    document.getElementById(elIds.costFormatted).textContent = formatCost(totalCost);
+                } else {
+                    document.getElementById(elIds.costFormatted).textContent = '-';
+                }
             }
             updateUrlHash();
         }
