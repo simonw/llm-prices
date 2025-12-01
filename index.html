@@ -208,8 +208,8 @@
                     <label for="outputCost">Cost per million output tokens ($):</label>
                     <input type="number" id="outputCost" min="0" step="0.000001">
                 </div>
-                <div class="result">
-                    <p>Total cost: <span id="costFormatted">-</span></p>
+                <div class="result" id="singleResult" style="display: none;">
+                    <p>Total cost: <span id="costFormatted"></span></p>
                 </div>
                 <div id="multiModelResults" style="display: none; margin-top: 20px;">
                     <!-- Multi-model comparison results will appear here -->
@@ -350,7 +350,7 @@
 
         function updateCalculatorMode() {
             const costInputGroups = document.querySelectorAll('.cost-input-group');
-            const singleResultDiv = document.querySelector('.result');
+            const singleResultDiv = document.getElementById('singleResult');
             const multiResultDiv = document.getElementById('multiModelResults');
             const cachedInputGroup = document.getElementById('cachedInputGroup');
 
@@ -369,9 +369,8 @@
                 // Show/hide cached input tokens field based on whether any model supports it
                 cachedInputGroup.style.display = hasCachedPricing ? 'block' : 'none';
             } else {
-                // Normal mode: show cost inputs, show single result
+                // Normal mode: show cost inputs, let calculateCost() handle single result visibility
                 costInputGroups.forEach(group => group.style.display = 'block');
-                singleResultDiv.style.display = 'block';
                 multiResultDiv.style.display = 'none';
                 cachedInputGroup.style.display = 'block'; // Always show in normal mode
             }
@@ -476,14 +475,16 @@
 
                 const totalCost = (inputTokens * inputCost / 1000000) + (cachedInputTokens * cachedInputCost / 1000000) + (outputTokens * outputCost / 1000000);
 
-                // Only show formatted cost if both tokens AND costs have been entered
+                // Only show the result box if both tokens AND costs have been entered
                 // (single model mode requires user to input both, unlike multi-model mode where costs come from presets)
                 const hasTokens = inputTokens > 0 || cachedInputTokens > 0 || outputTokens > 0;
                 const hasCosts = inputCost > 0 || cachedInputCost > 0 || outputCost > 0;
+                const singleResultDiv = document.getElementById('singleResult');
                 if (hasTokens && hasCosts) {
                     document.getElementById(elIds.costFormatted).textContent = formatCost(totalCost);
+                    singleResultDiv.style.display = 'block';
                 } else {
-                    document.getElementById(elIds.costFormatted).textContent = '-';
+                    singleResultDiv.style.display = 'none';
                 }
             }
             updateUrlHash();
