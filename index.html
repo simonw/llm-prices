@@ -476,7 +476,8 @@
 
                 const totalCost = (inputTokens * inputCost / 1000000) + (cachedInputTokens * cachedInputCost / 1000000) + (outputTokens * outputCost / 1000000);
 
-                // Only show formatted cost if tokens or costs have been entered
+                // Only show formatted cost if both tokens AND costs have been entered
+                // (single model mode requires user to input both, unlike multi-model mode where costs come from presets)
                 const hasTokens = inputTokens > 0 || cachedInputTokens > 0 || outputTokens > 0;
                 const hasCosts = inputCost > 0 || cachedInputCost > 0 || outputCost > 0;
                 if (hasTokens && hasCosts) {
