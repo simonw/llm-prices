@@ -338,6 +338,32 @@
           "input_cached": 0.125
         }
       ]
+    },
+    {
+      "id": "gpt-5.2",
+      "name": "GPT-5.2",
+      "price_history": [
+        {
+          "input": 1.75,
+          "output": 14.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.175
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.2-pro",
+      "name": "GPT-5.2 Pro",
+      "price_history": [
+        {
+          "input": 21.0,
+          "output": 168.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
     }
   ]
 }
