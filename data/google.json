@@ -221,6 +221,19 @@
           "input_cached": null
         }
       ]
+    },
+    {
+      "id": "gemini-3-flash-preview",
+      "name": "Gemini 3 Flash Preview",
+      "price_history": [
+        {
+          "input": 0.5,
+          "output": 3,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
     }
   ]
 }
