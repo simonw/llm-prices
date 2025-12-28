@@ -52,6 +52,45 @@
           "input_cached": null
         }
       ]
+    },
+    {
+      "id": "amazon-nova-2-omni-preview",
+      "name": "Amazon Nova 2 Omni (Preview)",
+      "price_history": [
+        {
+          "input": 0.3,
+          "output": 2.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "amazon-nova-2-pro-preview",
+      "name": "Amazon Nova 2 Pro (Preview)",
+      "price_history": [
+        {
+          "input": 1.25,
+          "output": 10.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "amazon-nova-2-lite",
+      "name": "Amazon Nova 2 Lite",
+      "price_history": [
+        {
+          "input": 0.3,
+          "output": 2.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
     }
   ]
 }
