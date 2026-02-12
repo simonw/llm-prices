@@ -143,6 +143,32 @@
           "input_cached": null
         }
       ]
+    },
+    {
+      "id": "claude-opus-4-6",
+      "name": "Claude Opus 4.6 ≤200k",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 25,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.5
+        }
+      ]
+    },
+    {
+      "id": "claude-opus-4-6-200k",
+      "name": "Claude Opus 4.6 >200k",
+      "price_history": [
+        {
+          "input": 10,
+          "output": 37.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 1.0
+        }
+      ]
     }
   ]
 }

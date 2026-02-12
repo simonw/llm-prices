@@ -231,7 +231,7 @@
           "output": 3,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.05
         }
       ]
     }
