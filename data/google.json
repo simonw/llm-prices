@@ -260,6 +260,20 @@
           "input_cached": null
         }
       ]
+    },
+    {
+      "id": "gemini-3.1-flash-lite-preview",
+      "name": "Gemini 3.1 Flash-Lite",
+      "price_history": [
+        {
+          "input": 0.25,
+          "output": 1.50,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.025
+        }
+      ]
     }
+
   ]
 }
