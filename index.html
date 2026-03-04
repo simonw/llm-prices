@@ -495,13 +495,15 @@
         }
 
         function formatCost(totalCost) {
-            const dollars = trimZeros(totalCost.toFixed(6));
-            if (totalCost >= 1) {
-                return `$${dollars}`;
-            } else {
-                const cents = trimZeros((totalCost * 100).toFixed(4));
-                return `$${dollars} (${cents} cents)`;
+            // Show whole dollar amounts without decimals (e.g. $60)
+            // and amounts with cents with two decimal places (e.g. $3.20, $0.05).
+            if (!isFinite(totalCost) || isNaN(totalCost)) return '$0';
+            const rounded = Math.round(totalCost);
+            // Treat values very close to integers as integers to avoid floating point noise
+            if (Math.abs(totalCost - rounded) < 1e-9) {
+                return `$${rounded}`;
             }
+            return `$${totalCost.toFixed(2)}`;
         }
 
         function setPreset(modelKey) {
