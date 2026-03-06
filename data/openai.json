@@ -364,6 +364,58 @@
           "input_cached": null
         }
       ]
+    },
+    {
+      "id": "gpt-5.4",
+      "name": "GPT-5.4 ≤272k",
+      "price_history": [
+        {
+          "input": 2.5,
+          "output": 15.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.25
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.4-272k",
+      "name": "GPT-5.4 >272k",
+      "price_history": [
+        {
+          "input": 5.0,
+          "output": 22.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.5
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.4-pro",
+      "name": "GPT-5.4 Pro ≤272k",
+      "price_history": [
+        {
+          "input": 30.0,
+          "output": 180.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.4-pro-272k",
+      "name": "GPT-5.4 Pro >272k",
+      "price_history": [
+        {
+          "input": 60.0,
+          "output": 270.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
     }
   ]
 }
