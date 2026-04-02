@@ -1,0 +1,31 @@
+{
+  "vendor": "qwen",
+  "models": [
+    {
+      "id": "qwen3.6-plus",
+      "name": "Qwen3.6 Plus ≤256k",
+      "price_history": [
+        {
+          "input": 0.5,
+          "output": 3,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3.6-plus-256k",
+      "name": "Qwen3.6 Plus >256k",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 6,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    }
+  ]
+}
