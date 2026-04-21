@@ -249,6 +249,32 @@
       ]
     },
     {
+      "id": "gpt-image-2-image",
+      "name": "gpt-image-2 (image gen) image tokens",
+      "price_history": [
+        {
+          "input": 8,
+          "output": 30,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 2
+        }
+      ]
+    },
+    {
+      "id": "gpt-image-2-text",
+      "name": "gpt-image-2 (image gen) text tokens",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 10,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 1.25
+        }
+      ]
+    },
+    {
       "id": "gpt-5-pro",
       "name": "GPT-5 Pro",
       "price_history": [
