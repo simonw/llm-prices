@@ -2,6 +2,32 @@
   "vendor": "deepseek",
   "models": [
     {
+      "id": "deepseek-v4-flash",
+      "name": "DeepSeek-V4-Flash",
+      "price_history": [
+        {
+          "input": 0.14,
+          "output": 0.28,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.028
+        }
+      ]
+    },
+    {
+      "id": "deepseek-v4-pro",
+      "name": "DeepSeek-V4-Pro",
+      "price_history": [
+        {
+          "input": 1.74,
+          "output": 3.48,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.145
+        }
+      ]
+    },
+    {
       "id": "deepseek-chat",
       "name": "DeepSeek Chat",
       "price_history": [
