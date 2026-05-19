@@ -280,7 +280,7 @@
       "price_history": [
         {
           "input": 1.50,
-          "output": 9.00,
+          "output": 9,
           "from_date": null,
           "to_date": null,
           "input_cached": 0.15
