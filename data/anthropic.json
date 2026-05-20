@@ -106,6 +106,19 @@
       ]
     },
     {
+      "id": "claude-sonnet-4.6",
+      "name": "Claude Sonnet 4.6",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
       "id": "claude-opus-4",
       "name": "Claude Opus 4",
       "price_history": [
@@ -134,6 +147,32 @@
     {
       "id": "claude-opus-4-5",
       "name": "Claude Opus 4.5",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 25,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "claude-opus-4-6",
+      "name": "Claude Opus 4.6",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 25,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "claude-opus-4-7",
+      "name": "Claude Opus 4.7",
       "price_history": [
         {
           "input": 5,
