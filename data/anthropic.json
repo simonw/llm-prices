@@ -143,6 +143,71 @@
           "input_cached": null
         }
       ]
+    },
+    {
+      "id": "claude-opus-4-6",
+      "name": "Claude Opus 4.6",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 25,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "claude-opus-4-7",
+      "name": "Claude Opus 4.7",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 25,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "claude-opus-4-8",
+      "name": "Claude Opus 4.8",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 25,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "claude-fable-5",
+      "name": "Claude Fable 5",
+      "price_history": [
+        {
+          "input": 10,
+          "output": 50,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "claude-mythos-5",
+      "name": "Claude Mythos 5",
+      "price_history": [
+        {
+          "input": 10,
+          "output": 50,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
     }
   ]
 }
