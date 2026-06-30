@@ -9,6 +9,7 @@ from pathlib import Path
 script_dir = Path(__file__).parent
 project_dir = script_dir.parent
 
+
 def get_data_folder_update_date():
     """Get the commit date of the last commit that touched the data/ folder"""
     result = subprocess.run(
@@ -27,9 +28,38 @@ def get_data_folder_update_date():
 
 print('Building JSON files...\n')
 
+build_date = date.today()
+
 # Read all vendor JSON files
 data_dir = project_dir / 'data'
 vendor_files = sorted([f for f in data_dir.iterdir() if f.suffix == '.json'])
+
+
+def parse_price_date(value):
+    if value is None:
+        return None
+    return date.fromisoformat(value)
+
+
+def is_price_effective(price_record, as_of):
+    from_date = parse_price_date(price_record['from_date'])
+    to_date = parse_price_date(price_record['to_date'])
+    return (from_date is None or from_date <= as_of) and (
+        to_date is None or as_of < to_date
+    )
+
+
+def current_price_for(model, as_of):
+    effective_prices = [
+        p for p in model['price_history'] if is_price_effective(p, as_of)
+    ]
+    if not effective_prices:
+        return None
+    return max(
+        effective_prices,
+        key=lambda p: parse_price_date(p['from_date']) or date.min
+    )
+
 
 # Build current-v1.json
 print('Building current-v1.json...')
@@ -40,8 +70,8 @@ for file in vendor_files:
         vendor_data = json.load(f)
 
     for model in vendor_data['models']:
-        # Find current price (where to_date is null)
-        current_price = next((p for p in model['price_history'] if p['to_date'] is None), None)
+        # Find current price for the build date.
+        current_price = current_price_for(model, build_date)
         if current_price:
             current_prices.append({
                 'id': model['id'],
@@ -91,7 +121,7 @@ def sort_key(item):
     vendor_sort = item['vendor']
     id_sort = item['id']
 
-    # Current prices (to_date: null) first, then by from_date descending
+    # Open-ended prices (to_date: null) first, then by from_date descending
     if item['to_date'] is None:
         date_sort = (0, '')
     else:

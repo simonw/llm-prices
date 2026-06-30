@@ -106,6 +106,26 @@
       ]
     },
     {
+      "id": "claude-sonnet-5",
+      "name": "Claude Sonnet 5",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 10,
+          "from_date": null,
+          "to_date": "2026-09-01",
+          "input_cached": null
+        },
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": "2026-09-01",
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
       "id": "claude-opus-4",
       "name": "Claude Opus 4",
       "price_history": [
