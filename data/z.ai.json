@@ -1,0 +1,226 @@
+{
+  "vendor": "z.ai",
+  "models": [
+    {
+      "id": "glm-5",
+      "name": "GLM-5",
+      "price_history": [
+        {
+          "input": 1.0,
+          "output": 3.2,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.2
+        }
+      ]
+    },
+    {
+      "id": "glm-5-code",
+      "name": "GLM-5-Code",
+      "price_history": [
+        {
+          "input": 1.2,
+          "output": 5.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.3
+        }
+      ]
+    },
+    {
+      "id": "glm-4.7",
+      "name": "GLM-4.7",
+      "price_history": [
+        {
+          "input": 0.6,
+          "output": 2.2,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.11
+        }
+      ]
+    },
+    {
+      "id": "glm-4.7-flashx",
+      "name": "GLM-4.7-FlashX",
+      "price_history": [
+        {
+          "input": 0.07,
+          "output": 0.4,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.01
+        }
+      ]
+    },
+    {
+      "id": "glm-4.6",
+      "name": "GLM-4.6",
+      "price_history": [
+        {
+          "input": 0.6,
+          "output": 2.2,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.11
+        }
+      ]
+    },
+    {
+      "id": "glm-4.5",
+      "name": "GLM-4.5",
+      "price_history": [
+        {
+          "input": 0.6,
+          "output": 2.2,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.11
+        }
+      ]
+    },
+    {
+      "id": "glm-4.5-x",
+      "name": "GLM-4.5-X",
+      "price_history": [
+        {
+          "input": 2.2,
+          "output": 8.9,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.45
+        }
+      ]
+    },
+    {
+      "id": "glm-4.5-air",
+      "name": "GLM-4.5-Air",
+      "price_history": [
+        {
+          "input": 0.2,
+          "output": 1.1,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.03
+        }
+      ]
+    },
+    {
+      "id": "glm-4.5-airx",
+      "name": "GLM-4.5-AirX",
+      "price_history": [
+        {
+          "input": 1.1,
+          "output": 4.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.22
+        }
+      ]
+    },
+    {
+      "id": "glm-4-32b-0414-128k",
+      "name": "GLM-4-32B-0414-128K",
+      "price_history": [
+        {
+          "input": 0.1,
+          "output": 0.1,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "glm-4.7-flash",
+      "name": "GLM-4.7-Flash",
+      "price_history": [
+        {
+          "input": 0.0,
+          "output": 0.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.0
+        }
+      ]
+    },
+    {
+      "id": "glm-4.5-flash",
+      "name": "GLM-4.5-Flash",
+      "price_history": [
+        {
+          "input": 0.0,
+          "output": 0.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.0
+        }
+      ]
+    },
+    {
+      "id": "glm-4.6v",
+      "name": "GLM-4.6V",
+      "price_history": [
+        {
+          "input": 0.3,
+          "output": 0.9,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.05
+        }
+      ]
+    },
+    {
+      "id": "glm-ocr",
+      "name": "GLM-OCR",
+      "price_history": [
+        {
+          "input": 0.03,
+          "output": 0.03,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "glm-4.6v-flashx",
+      "name": "GLM-4.6V-FlashX",
+      "price_history": [
+        {
+          "input": 0.04,
+          "output": 0.4,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.004
+        }
+      ]
+    },
+    {
+      "id": "glm-4.5v",
+      "name": "GLM-4.5V",
+      "price_history": [
+        {
+          "input": 0.6,
+          "output": 1.8,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.11
+        }
+      ]
+    },
+    {
+      "id": "glm-4.6v-flash",
+      "name": "GLM-4.6V-Flash",
+      "price_history": [
+        {
+          "input": 0.0,
+          "output": 0.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.0
+        }
+      ]
+    }
+  ]
+}
