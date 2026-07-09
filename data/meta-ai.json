@@ -1,0 +1,18 @@
+{
+  "vendor": "meta-ai",
+  "models": [
+    {
+      "id": "muse-spark-1.1",
+      "name": "Muse Spark 1.1",
+      "price_history": [
+        {
+          "input": 1.25,
+          "output": 4.25,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.15
+        }
+      ]
+    }
+  ]
+}
