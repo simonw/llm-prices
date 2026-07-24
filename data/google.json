@@ -286,6 +286,32 @@
           "input_cached": 0.15
         }
       ]
+    },
+    {
+      "id": "gemini-3.6-flash",
+      "name": "Gemini 3.6 Flash",
+      "price_history": [
+        {
+          "input": 1.50,
+          "output": 7.50,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.15
+        }
+      ]
+    },
+    {
+      "id": "gemini-3.5-flash-lite",
+      "name": "Gemini 3.5 Flash-Lite",
+      "price_history": [
+        {
+          "input": 0.30,
+          "output": 2.50,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.03
+        }
+      ]
     }
   ]
 }
