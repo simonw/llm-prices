@@ -526,11 +526,11 @@
       "name": "GPT-5.6 Terra",
       "price_history": [
         {
-          "input": 2.5,
-          "output": 15.0,
+          "input": 2,
+          "output": 12.0,
           "from_date": null,
           "to_date": null,
-          "input_cached": 0.25
+          "input_cached": 0.20
         }
       ]
     },
@@ -539,11 +539,11 @@
       "name": "GPT-5.6 Luna",
       "price_history": [
         {
-          "input": 1.0,
-          "output": 6.0,
+          "input": 0.2,
+          "output": 1.20,
           "from_date": null,
           "to_date": null,
-          "input_cached": 0.1
+          "input_cached": 0.02
         }
       ]
     }
