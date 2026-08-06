@@ -836,12 +836,9 @@
             }
         }
 
-        // Load models from current.json
-        async function loadModels() {
+        // Parse model price data
+        function loadModels(data) {
             try {
-                const response = await fetch('current-v1.json');
-                const data = await response.json();
-
                 // Convert prices array to object with id as the key
                 presets = {};
                 data.prices.forEach(model => {
@@ -869,13 +866,61 @@
         // Make setPreset globally accessible for dynamically created buttons
         window.setPreset = setPreset;
 
-        // Initialize on DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadModels();        // 0. Load models from JSON first
-            applyStateFromHash();      // 1. Apply state from URL hash first (updates globals)
-            createPresetsTableStructure(); // 2. Setup table structure & initial render using (potentially updated) globals
-            updateCalculatorMode();    // 3. Set calculator mode based on selections
-            calculateCost();           // 4. Initial calculation and URL hash update based on current state
+        function loadScript(src, timeoutMs=10000) {
+            return new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = src;
+                s.async = false; // ensure execution order similar to inline script
+                const to = setTimeout(() => { s.onerror = null; s.onload = null; reject(new Error('timeout')); }, timeoutMs);
+                s.onload = () => { clearTimeout(to); resolve(s); };
+                s.onerror = (e) => { clearTimeout(to); reject(e); };
+                document.head.appendChild(s);
+            });
+        }
+
+        // Wait until `window.__price_init_done` is true (set in the handler called by price script)
+        function waitForPriceData(timeoutMs = 3000, intervalMs = 50) {
+            return new Promise((resolve, reject) => {
+                if (window.__price_init_done) return resolve(true);
+                const start = Date.now();
+                const iv = setInterval(() => {
+                    if (window.__price_init_done) {
+                        clearInterval(iv);
+                        resolve(true);
+                    } else if (Date.now() - start > timeoutMs) {
+                        clearInterval(iv);
+                        reject(new Error('Timed out waiting for price data'));
+                    }
+                }, intervalMs);
+            });
+        }
+
+        async function loadPriceData() {
+            try {
+                await loadScript('current-v1.js');
+            } catch (err) {
+                console.error('Failed to load current-v1.js:', err);
+                throw err;
+            }
+        }
+
+        // Initialization that must run only after price_data is available (or attempted)
+        function initializeAfterPriceData(data) {
+            // 0. Convert loaded price_data into presets (if present)
+            if (data) {
+                loadModels(data);
+            } else {
+                console.error('Price data not available; skipping loadModels.');
+                document.getElementById('lastUpdated').textContent = 'Unknown';
+            }
+            // 1. Apply state from URL hash first (updates globals)
+            applyStateFromHash();
+            // 2. Setup table structure & initial render using (potentially updated) globals
+            createPresetsTableStructure();
+            // 3. Set calculator mode based on selections
+            updateCalculatorMode();
+            // 4. Initial calculation and URL hash update based on current state
+            calculateCost();
 
             // Add event listeners to form inputs
             const formInputs = [elIds.inputTokens, elIds.cachedInputTokens, elIds.outputTokens, elIds.inputCost, elIds.cachedInputCost, elIds.outputCost];
@@ -892,10 +937,45 @@
                 }
             });
             // Specific paste handler for inputTokens - remove from generic loop if it's only for one.
-            // Original code had it only for inputTokens. Let's keep it for inputTokens only for now.
             document.getElementById(elIds.inputTokens).removeEventListener('paste', handlePaste); // remove generic one
             document.getElementById(elIds.inputTokens).addEventListener('paste', handlePaste); // add specific one
+        }
 
+        // Initialize on DOMContentLoaded: define a callback, load price JS, then initialize UI when data is ready.
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Define a well-known callback that price files can call when they finish setting price_data.
+            // This ensures the price file can directly trigger initialization and guarantees functions
+            // in this page have been defined before the price file attempts to call into them.
+            window.onPriceDataReady = function(data) {
+                window.__price_init_done = true;
+                initializeAfterPriceData(data);
+            };
+
+            try {
+                // Load the JS file which should set `price_data` and call `onPriceDataReady`.
+                await loadPriceData();
+
+                // Wait for price_data to appear or for the price script to call `onPriceDataReady`.
+                try {
+                    await waitForPriceData();
+                    if (!window.__price_init_done) {
+                        window.__price_init_done = true;
+                        initializeAfterPriceData(false);
+                    }
+                } catch (err) {
+                    // Timed out waiting for price_data; still call initialize but indicate failure
+                    if (!window.__price_init_done) {
+                        window.__price_init_done = true;
+                        initializeAfterPriceData(false);
+                    }
+                }
+            } catch (err) {
+                // Failed to load script entirely
+                if (!window.__price_init_done) {
+                    window.__price_init_done = true;
+                    initializeAfterPriceData(false);
+                }
+            }
         });
     </script>
 </body>
