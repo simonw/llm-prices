@@ -2,6 +2,19 @@
   "vendor": "moonshot-ai",
   "models": [
     {
+      "id": "kimi-k2.5",
+      "name": "Kimi K2.5",
+      "price_history": [
+        {
+          "input": 0.6,
+          "output": 3.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.1
+        }
+      ]
+    },
+    {
       "id": "kimi-k2-0905-preview",
       "name": "Kimi K2 0905 Preview",
       "price_history": [
