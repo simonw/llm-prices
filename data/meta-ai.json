@@ -2,6 +2,32 @@
   "vendor": "meta-ai",
   "models": [
     {
+      "id": "muse-spark-1.2-contributor",
+      "name": "Muse Spark 1.2 Contributor",
+      "price_history": [
+        {
+          "input": 0.1,
+          "output": 0.2,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.002
+        }
+      ]
+    },
+    {
+      "id": "muse-spark-1.2",
+      "name": "Muse Spark 1.2",
+      "price_history": [
+        {
+          "input": 1.25,
+          "output": 4.25,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.15
+        }
+      ]
+    },
+    {
       "id": "muse-spark-1.1",
       "name": "Muse Spark 1.1",
       "price_history": [
