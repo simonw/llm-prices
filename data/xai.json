@@ -286,6 +286,32 @@
           "input_cached": 0.4
         }
       ]
+    },
+    {
+      "id": "grok-4.6",
+      "name": "Grok 4.6 ≤200k",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 6,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.5
+        }
+      ]
+    },
+    {
+      "id": "grok-4.6-200k",
+      "name": "Grok 4.6 >200k",
+      "price_history": [
+        {
+          "input": 4,
+          "output": 12,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 1
+        }
+      ]
     }
   ]
 }
