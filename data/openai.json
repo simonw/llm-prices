@@ -165,6 +165,13 @@
           "input": 10,
           "output": 40,
           "from_date": null,
+          "to_date": "2025-06-10",
+          "input_cached": 2.5
+        },
+        {
+          "input": 2,
+          "output": 8,
+          "from_date": "2025-06-10",
           "to_date": null,
           "input_cached": 0.5
         }
@@ -529,8 +536,15 @@
           "input": 5.0,
           "output": 30.0,
           "from_date": null,
-          "to_date": null,
+          "to_date": "2026-08-21",
           "input_cached": 0.50
+        },
+        {
+          "input": 4.0,
+          "output": 20.0,
+          "from_date": "2026-08-21",
+          "to_date": null,
+          "input_cached": 0.40
         }
       ]
     },
@@ -542,8 +556,15 @@
           "input": 10.0,
           "output": 45.0,
           "from_date": null,
-          "to_date": null,
+          "to_date": "2026-08-21",
           "input_cached": 1.0
+        },
+        {
+          "input": 8.0,
+          "output": 30.0,
+          "from_date": "2026-08-21",
+          "to_date": null,
+          "input_cached": 0.80
         }
       ]
     },
@@ -624,6 +645,97 @@
           "from_date": "2026-07-30",
           "to_date": null,
           "input_cached": 0.04
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.6-cyber",
+      "name": "GPT-5.6 Cyber",
+      "price_history": [
+        {
+          "input": 12.5,
+          "output": 75.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 1.25
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.5-cyber",
+      "name": "GPT-5.5 Cyber",
+      "price_history": [
+        {
+          "input": 12.5,
+          "output": 75.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 1.25
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.3-codex",
+      "name": "GPT-5.3 Codex",
+      "price_history": [
+        {
+          "input": 1.75,
+          "output": 14.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.175
+        }
+      ]
+    },
+    {
+      "id": "gpt-5-search-api",
+      "name": "GPT-5 Search API",
+      "price_history": [
+        {
+          "input": 1.25,
+          "output": 10.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.125
+        }
+      ]
+    },
+    {
+      "id": "chat-latest",
+      "name": "ChatGPT Latest (chat-latest)",
+      "price_history": [
+        {
+          "input": 5.0,
+          "output": 30.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.5
+        }
+      ]
+    },
+    {
+      "id": "gpt-image-1.5-image",
+      "name": "gpt-image-1.5 (image gen) image tokens",
+      "price_history": [
+        {
+          "input": 8,
+          "output": 32,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 2
+        }
+      ]
+    },
+    {
+      "id": "gpt-image-1.5-text",
+      "name": "gpt-image-1.5 (image gen) text tokens",
+      "price_history": [
+        {
+          "input": 5,
+          "output": 10,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 1.25
         }
       ]
     }
