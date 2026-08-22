@@ -3,27 +3,67 @@
   "models": [
     {
       "id": "deepseek-v4-flash",
-      "name": "DeepSeek-V4-Flash",
+      "name": "DeepSeek-V4-Flash off-peak",
       "price_history": [
         {
           "input": 0.14,
           "output": 0.28,
           "from_date": null,
-          "to_date": null,
+          "to_date": "2026-08-17",
           "input_cached": 0.028
+        },
+        {
+          "input": 0.22,
+          "output": 0.66,
+          "from_date": "2026-08-17",
+          "to_date": null,
+          "input_cached": 0.007
+        }
+      ]
+    },
+    {
+      "id": "deepseek-v4-flash-peak",
+      "name": "DeepSeek-V4-Flash peak",
+      "price_history": [
+        {
+          "input": 0.44,
+          "output": 1.32,
+          "from_date": "2026-08-17",
+          "to_date": null,
+          "input_cached": 0.014
         }
       ]
     },
     {
       "id": "deepseek-v4-pro",
-      "name": "DeepSeek-V4-Pro",
+      "name": "DeepSeek-V4-Pro off-peak",
       "price_history": [
         {
           "input": 1.74,
           "output": 3.48,
           "from_date": null,
-          "to_date": null,
+          "to_date": "2026-08-17",
           "input_cached": 0.145
+        },
+        {
+          "input": 0.66,
+          "output": 1.98,
+          "from_date": "2026-08-17",
+          "to_date": null,
+          "input_cached": 0.022
+        }
+      ]
+    },
+    {
+      "id": "deepseek-v4-pro-peak",
+      "name": "DeepSeek-V4-Pro peak",
+      "price_history": [
+        {
+          "input": 1.32,
+          "output": 3.96,
+          "from_date": "2026-08-17",
+          "to_date": null,
+          "input_cached": 0.044
         }
       ]
     },
