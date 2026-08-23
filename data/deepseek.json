@@ -35,6 +35,32 @@
       ]
     },
     {
+      "id": "deepseek-v4-flash-vision-exp",
+      "name": "DeepSeek-V4-Flash-Vision-Exp off-peak",
+      "price_history": [
+        {
+          "input": 0.22,
+          "output": 0.66,
+          "from_date": "2026-08-21",
+          "to_date": null,
+          "input_cached": 0.007
+        }
+      ]
+    },
+    {
+      "id": "deepseek-v4-flash-vision-exp-peak",
+      "name": "DeepSeek-V4-Flash-Vision-Exp peak",
+      "price_history": [
+        {
+          "input": 0.44,
+          "output": 1.32,
+          "from_date": "2026-08-21",
+          "to_date": null,
+          "input_cached": 0.014
+        }
+      ]
+    },
+    {
       "id": "deepseek-v4-pro",
       "name": "DeepSeek-V4-Pro off-peak",
       "price_history": [
