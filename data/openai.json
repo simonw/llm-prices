@@ -649,6 +649,32 @@
       ]
     },
     {
+      "id": "gpt-6-astra",
+      "name": "GPT-6 Astra ≤272k",
+      "price_history": [
+        {
+          "input": 10.0,
+          "output": 50.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 1.0
+        }
+      ]
+    },
+    {
+      "id": "gpt-6-astra-272k",
+      "name": "GPT-6 Astra >272k",
+      "price_history": [
+        {
+          "input": 20.0,
+          "output": 75.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 2.0
+        }
+      ]
+    },
+    {
       "id": "gpt-5.6-cyber",
       "name": "GPT-5.6 Cyber",
       "price_history": [
