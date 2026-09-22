@@ -197,6 +197,19 @@
       ]
     },
     {
+      "id": "claude-opus-5-5",
+      "name": "Claude Opus 5.5",
+      "price_history": [
+        {
+          "input": 4,
+          "output": 20,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.2
+        }
+      ]
+    },
+    {
       "id": "claude-fable-5",
       "name": "Claude Fable 5",
       "price_history": [
