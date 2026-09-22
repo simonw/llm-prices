@@ -1,0 +1,18 @@
+{
+  "vendor": "typesafe",
+  "models": [
+    {
+      "id": "jev-1.13.0",
+      "name": "Jev 1.13",
+      "price_history": [
+        {
+          "input": 0.042,
+          "output": 0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    }
+  ]
+}
