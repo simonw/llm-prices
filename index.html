@@ -244,8 +244,13 @@
                                 <th aria-sort="ascending"> <!-- Default sort visually, JS will confirm -->
                                     <button type="button" id="sortByInput">
                                         Input cost
-                                        <span style="font-size: 0.85em; color: #666; font-weight: normal;">(Cached)</span>
                                         <span class="sort-icon" aria-hidden="true">↑</span>
+                                    </button>
+                                </th>
+                                <th aria-sort="none">
+                                    <button type="button" id="sortByInputCached">
+                                        Cached input cost
+                                        <span class="sort-icon" aria-hidden="true"></span>
                                     </button>
                                 </th>
                                 <th aria-sort="none">
@@ -297,6 +302,7 @@
             presetTableBody: 'presetTableBody',
             sortByName: 'sortByName',
             sortByInput: 'sortByInput',
+            sortByInputCached: 'sortByInputCached',
             sortByOutput: 'sortByOutput'
         };
 
@@ -515,6 +521,7 @@
         }
 
         function formatPrice(price) {
+            if (price === undefined || price === null || price === '') return '';
             if (Number.isInteger(price)) return `$${price}`;
             const priceStr = price.toString();
             if (priceStr.split('.')[1]?.length > 2 && !priceStr.endsWith('0')) return `$${priceStr}`;
@@ -573,6 +580,9 @@
                 } else if (sortCol === 'input') {
                     valA = a.input;
                     valB = b.input;
+                } else if (sortCol === 'inputCached') {
+                    valA = a.input_cached;
+                    valB = b.input_cached;
                 } else if (sortCol === 'output') {
                     valA = a.output;
                     valB = b.output;
@@ -592,14 +602,11 @@
             data.forEach(item => {
                 const row = document.createElement('tr');
                 // Format input cost with cached price if available
-                let inputCostDisplay = formatPrice(item.input);
-                if (item.input_cached !== null && item.input_cached !== undefined) {
-                    inputCostDisplay += ` <span style="font-size: 0.85em; color: #666;">(${formatPrice(item.input_cached)})</span>`;
-                }
                 // Note: onclick now calls window.setPreset because these are dynamically added
                 row.innerHTML = `
                     <td><button class="model-name-btn" onclick="window.setPreset('${item.key}')">${item.name}</button></td>
-                    <td>${inputCostDisplay}</td>
+                    <td>${formatPrice(item.input)}</td>
+                    <td>${formatPrice(item.input_cached)}</td>
                     <td>${formatPrice(item.output)}</td>
                     <td><input type="checkbox" class="compare-checkbox" data-model-key="${item.key}" ${selectedModels.has(item.key) ? 'checked' : ''}></td>
                 `;
@@ -692,6 +699,7 @@
             let activeThButtonId;
             if (currentSortColumn === 'name') activeThButtonId = elIds.sortByName;
             else if (currentSortColumn === 'input') activeThButtonId = elIds.sortByInput;
+            else if (currentSortColumn === 'inputCached') activeThButtonId = elIds.sortByInputCached;
             else if (currentSortColumn === 'output') activeThButtonId = elIds.sortByOutput;
 
             if (activeThButtonId) {
@@ -743,7 +751,7 @@
             const sortDirFromHash = params.get(HASH_KEYS.sortDir);
 
             // Valid sort columns and directions
-            const validSortCols = ['name', 'input', 'output'];
+            const validSortCols = ['name', 'input', 'inputCached', 'output'];
             const validSortDirs = ['ascending', 'descending'];
 
             if (sortByFromHash && validSortCols.includes(sortByFromHash) &&
@@ -786,6 +794,7 @@
             // Event listeners for sort buttons
             document.getElementById(elIds.sortByName).addEventListener('click', () => sortTable('name'));
             document.getElementById(elIds.sortByInput).addEventListener('click', () => sortTable('input'));
+            document.getElementById(elIds.sortByInputCached).addEventListener('click', () => sortTable('inputCached'));
             document.getElementById(elIds.sortByOutput).addEventListener('click', () => sortTable('output'));
 
             // Event listeners for search input
