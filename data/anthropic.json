@@ -119,6 +119,19 @@
       ]
     },
     {
+      "id": "claude-sonnet-5.5",
+      "name": "Claude Sonnet 5.5",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 10,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.2
+        }
+      ]
+    },
+    {
       "id": "claude-opus-4",
       "name": "Claude Opus 4",
       "price_history": [
