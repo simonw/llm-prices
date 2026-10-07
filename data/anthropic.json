@@ -80,8 +80,60 @@
       ]
     },
     {
+      "id": "claude-haiku-5.5",
+      "name": "Claude Haiku 5.5 ≤100k",
+      "price_history": [
+        {
+          "input": 0.1,
+          "output": 0.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.01
+        }
+      ]
+    },
+    {
+      "id": "claude-haiku-5.5-100k",
+      "name": "Claude Haiku 5.5 >100k",
+      "price_history": [
+        {
+          "input": 0.5,
+          "output": 2.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.05
+        }
+      ]
+    },
+    {
+      "id": "claude-sonnet-4",
+      "name": "Claude Sonnet 4 ≤200k",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.3
+        }
+      ]
+    },
+    {
+      "id": "claude-sonnet-4-200k",
+      "name": "Claude Sonnet 4 >200k",
+      "price_history": [
+        {
+          "input": 6,
+          "output": 22.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.6
+        }
+      ]
+    },
+    {
       "id": "claude-sonnet-4.5",
-      "name": "Claude Sonnet 4 and 4.5 ≤200k",
+      "name": "Claude Sonnet 4.5 ≤200k",
       "price_history": [
         {
           "input": 3,
@@ -94,7 +146,7 @@
     },
     {
       "id": "claude-sonnet-4.5-200k",
-      "name": "Claude Sonnet 4 and 4.5 >200k",
+      "name": "Claude Sonnet 4.5 >200k",
       "price_history": [
         {
           "input": 6,
@@ -102,6 +154,19 @@
           "from_date": null,
           "to_date": null,
           "input_cached": 0.6
+        }
+      ]
+    },
+    {
+      "id": "claude-sonnet-4.6",
+      "name": "Claude Sonnet 4.6",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.3
         }
       ]
     },
@@ -271,6 +336,19 @@
           "from_date": null,
           "to_date": null,
           "input_cached": 1
+        }
+      ]
+    },
+    {
+      "id": "claude-mythos-5-1",
+      "name": "Claude Mythos 5.1",
+      "price_history": [
+        {
+          "input": 10,
+          "output": 50,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.25
         }
       ]
     }
