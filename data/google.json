@@ -359,6 +359,26 @@
           "input_cached": 0.03
         }
       ]
+    },
+    {
+      "id": "gemini-4-argon",
+      "name": "Gemini 4 Argon",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 10,
+          "from_date": null,
+          "to_date": "2026-12-01",
+          "input_cached": 0.10
+        },
+        {
+          "input": 4,
+          "output": 20,
+          "from_date": "2026-12-01",
+          "to_date": null,
+          "input_cached": 0.20
+        }
+      ]
     }
   ]
 }
