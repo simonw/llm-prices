@@ -327,6 +327,19 @@
       ]
     },
     {
+      "id": "claude-fable-5-2",
+      "name": "Claude Fable 5.2",
+      "price_history": [
+        {
+          "input": 8,
+          "output": 40,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.2
+        }
+      ]
+    },
+    {
       "id": "claude-mythos-5",
       "name": "Claude Mythos 5",
       "price_history": [
@@ -349,6 +362,19 @@
           "from_date": null,
           "to_date": null,
           "input_cached": 0.25
+        }
+      ]
+    },
+    {
+      "id": "claude-mythos-5-2",
+      "name": "Claude Mythos 5.2",
+      "price_history": [
+        {
+          "input": 8,
+          "output": 40,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.2
         }
       ]
     }
