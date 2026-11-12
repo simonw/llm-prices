@@ -399,6 +399,19 @@
           "input_cached": 0.20
         }
       ]
+    },
+    {
+      "id": "gemini-4-hydrogen",
+      "name": "Gemini 4 Hydrogen",
+      "price_history": [
+        {
+          "input": 1.5,
+          "output": 7.5,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.075
+        }
+      ]
     }
   ]
 }
