@@ -779,6 +779,58 @@
       ]
     },
     {
+      "id": "gpt-6.2-astra",
+      "name": "GPT-6.2 Astra ≤272k",
+      "price_history": [
+        {
+          "input": 8,
+          "output": 40,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.4
+        }
+      ]
+    },
+    {
+      "id": "gpt-6.2-astra-272k",
+      "name": "GPT-6.2 Astra >272k",
+      "price_history": [
+        {
+          "input": 16,
+          "output": 60,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.8
+        }
+      ]
+    },
+    {
+      "id": "gpt-6.2-sol",
+      "name": "GPT-6.2 Sol ≤272k",
+      "price_history": [
+        {
+          "input": 2,
+          "output": 10,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.1
+        }
+      ]
+    },
+    {
+      "id": "gpt-6.2-sol-272k",
+      "name": "GPT-6.2 Sol >272k",
+      "price_history": [
+        {
+          "input": 4,
+          "output": 15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.2
+        }
+      ]
+    },
+    {
       "id": "gpt-5.6-cyber",
       "name": "GPT-5.6 Cyber",
       "price_history": [
