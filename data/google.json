@@ -412,6 +412,19 @@
           "input_cached": 0.075
         }
       ]
+    },
+    {
+      "id": "gemini-4-neon",
+      "name": "Gemini 4 Neon",
+      "price_history": [
+        {
+          "input": 3,
+          "output": 15,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": 0.15
+        }
+      ]
     }
   ]
 }
