@@ -1,0 +1,109 @@
+{
+  "vendor": "crowllm",
+  "models": [
+    {
+      "id": "deepseek-v4-flash",
+      "name": "DeepSeek V4 Flash",
+      "price_history": [
+        {
+          "input": 0.14,
+          "output": 0.55,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "glm-5.3",
+      "name": "GLM 5.3",
+      "price_history": [
+        {
+          "input": 0.5976,
+          "output": 2.09155,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "kimi-k3",
+      "name": "Kimi K3",
+      "price_history": [
+        {
+          "input": 2.49,
+          "output": 12.99,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "claude-opus-4-7",
+      "name": "Claude Opus 4.7",
+      "price_history": [
+        {
+          "input": 4.0,
+          "output": 20.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "gpt-5.6-sol",
+      "name": "GPT 5.6 Sol",
+      "price_history": [
+        {
+          "input": 3.0,
+          "output": 13.99,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "gemini-3.7-flash",
+      "name": "Gemini 3.7 Flash",
+      "price_history": [
+        {
+          "input": 0.75,
+          "output": 3.75,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "qwen-3.8-27b:free",
+      "name": "Qwen 3.8 27B (free)",
+      "price_history": [
+        {
+          "input": 0.0,
+          "output": 0.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    },
+    {
+      "id": "qwen4-max:free",
+      "name": "Qwen4 Max (free)",
+      "price_history": [
+        {
+          "input": 0.0,
+          "output": 0.0,
+          "from_date": null,
+          "to_date": null,
+          "input_cached": null
+        }
+      ]
+    }
+  ]
+}
