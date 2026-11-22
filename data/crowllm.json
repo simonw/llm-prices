@@ -10,7 +10,7 @@
           "output": 0.55,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.014
         }
       ]
     },
@@ -23,7 +23,7 @@
           "output": 2.09155,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.149395
         }
       ]
     },
@@ -36,7 +36,7 @@
           "output": 12.99,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.223
         }
       ]
     },
@@ -49,7 +49,7 @@
           "output": 20.0,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.35
         }
       ]
     },
@@ -75,20 +75,7 @@
           "output": 3.75,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
-        }
-      ]
-    },
-    {
-      "id": "qwen-3.8-27b:free",
-      "name": "Qwen 3.8 27B (free)",
-      "price_history": [
-        {
-          "input": 0.0,
-          "output": 0.0,
-          "from_date": null,
-          "to_date": null,
-          "input_cached": null
+          "input_cached": 0.09
         }
       ]
     },
@@ -101,7 +88,7 @@
           "output": 0.0,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.0
         }
       ]
     }
