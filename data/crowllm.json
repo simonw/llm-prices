@@ -84,11 +84,11 @@
       "name": "Qwen4 Max (free)",
       "price_history": [
         {
-          "input": 0.0,
-          "output": 0.0,
+          "input": 1.0,
+          "output": 4.0,
           "from_date": null,
           "to_date": null,
-          "input_cached": 0.0
+          "input_cached": null
         }
       ]
     }
