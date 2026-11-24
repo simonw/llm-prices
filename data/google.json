@@ -49,7 +49,7 @@
           "output": 0.4,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.025
         }
       ]
     },
@@ -231,7 +231,7 @@
           "output": 3,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.05
         }
       ]
     },
@@ -244,7 +244,7 @@
           "output": 12,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.2
         }
       ]
     },
@@ -257,7 +257,7 @@
           "output": 18,
           "from_date": null,
           "to_date": null,
-          "input_cached": null
+          "input_cached": 0.4
         }
       ]
     },
