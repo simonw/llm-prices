@@ -1,0 +1,18 @@
+{
+  "vendor": "webwright",
+  "models": [
+    {
+      "id": "wren-r1",
+      "name": "Wren R1",
+      "price_history": [
+        {
+          "input": 0.4,
+          "output": 1.6,
+          "input_cached": null,
+          "from_date": null,
+          "to_date": null
+        }
+      ]
+    }
+  ]
+}
